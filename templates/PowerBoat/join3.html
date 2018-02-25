@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %} - Power Boat Racing {% endblock %}
+
+{% block body %}
+
+<h3>Outer {{direction}} Joining the drivers and oldraces  .</h3>
+
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>name</th>
+			<th>team</th>
+			<th>driver.boat</th>
+			<th>race_id</th>
+			<th>class</th>
+			<th>year</th>
+			<th>location</th>
+			<th>winner</th>
+
+
+		</tr>
+		 {% for id,name,team,driverboat,raceid,class,year,location,winner in join %}
+			<tr>
+				<td></td>
+				<td> {{id}}   </td>
+				<td> {{name}} </td>
+				<td> {{team}} </td>
+				<td> {{driverboat}}   </td>
+				<td> {{raceid}} </td>
+				<td> {{class}} </td>
+				<td> {{year}}   </td>
+				<td> {{location}} </td>
+				<td> {{winner}} </td>
+
+	    </tr>
+		{% endfor %}
+<table>
+
+<br><hr><a href="/drivers"> Return Back ! </a>
+
+{% endblock %}

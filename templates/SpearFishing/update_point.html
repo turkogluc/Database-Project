@@ -1,0 +1,46 @@
+{% extends "WaterPolo/WaterPolo_Layout.html" %}
+
+{% block title %} - Update Water Polo Player{% endblock %}
+
+{% block body %}
+<h1> Update Player </h1>
+
+
+
+
+<form action="{{ url_for('spear_fishing') }}" method="post">
+		<table class="table table-bordered">
+			<thead>
+
+		<tr class = "danger">
+			<th></th>
+			<th>Fisher id</th>
+			<th>Fisher Name</th>
+			<th>Fish Name</th>
+			<th>Gram</th>
+		</thead>
+	<tbody>
+		</tr>
+		{% for id,fisher_id,fisher_name,fish_name,gram in point %}
+		<tr class = "success">
+				<td> <input type="radio" name="select"value="{{id}}" /> </td>
+				<td> {{fisher_id}} </td>
+				<td> {{fisher_name}} </td>
+				<td> {{fish_name}} </td>
+				<td> {{gram}} </td>
+	    </tr>
+	    {% endfor %}
+
+	    <tr>
+			<td> </td>
+			<td> <input type="text" name="fisher_id" value="" />    </td>
+			<td> <input type="text" name="fisher_name" value="" /> </td>
+			<td> <input type="text" name="fish_name" value="" /> </td>
+			<td> <input type="text" name="gram" value="" /> </td>
+
+	</table>
+	 <input style = "margin:25px"  type="submit" name="Update_Point" value="Update Point" class="btn btn-danger btn-md"  />
+
+
+</form>
+{% endblock %}

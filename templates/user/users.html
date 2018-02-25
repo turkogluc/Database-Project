@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %} - Users {% endblock %}
+
+{% block body %}
+<h1> User List </h1>
+<form action="{{ url_for('users') }}" method="post">
+	<table>
+		<tr>
+			<th> </th>
+			<th>User Name</th>
+			<th>Password</th>
+			<th>Type</th>
+		</tr>
+		{% for id, username, password, type in users %}
+			<tr>
+				<td> <input type="radio" name="select"value="{{id}}" /> </td>
+				<td> {{username}} </td>
+				<td> {{password}} </td>
+				<td> {{type}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+
+			<td><input type="text" name="UserName" value="" placeholder="User Name" /></td>
+			<td> <input type="text" name="Password" value="" placeholder="Password"/> </td>
+			<td> <input type="text" name="UserType" value="" placeholder="User Type"/> </td>
+	    </tr>
+	</table>
+	<input type="submit" name="Add"value="Add" />
+	<input type="submit" name="Delete"value="Delete" />
+	<input type="submit" name="Update"value="Update" />
+	<input type="submit" name="Reset"value="Reset Table" />
+</form>
+
+<footer>Ercan Alp Serteli</footer>
+{% endblock %}

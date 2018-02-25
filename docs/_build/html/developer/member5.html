@@ -1,0 +1,454 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parts Implemented by ANIL YILDIRIM &mdash; itucsdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="itucsdb 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Developer Guide" href="index.html" />
+    <link rel="prev" title="Parts Implemented by Ercan Alp Serteli" href="member4.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member4.html" title="Parts Implemented by Ercan Alp Serteli"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Developer Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parts-implemented-by-anil-yildirim">
+<h1>Parts Implemented by ANIL YILDIRIM<a class="headerlink" href="#parts-implemented-by-anil-yildirim" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="database-tables">
+<h2>Database Tables<a class="headerlink" href="#database-tables" title="Permalink to this headline">¶</a></h2>
+<div class="figure" id="id1">
+<a class="reference internal image-reference" href="../_images/tablerelation.png"><img alt="Database Tables" src="../_images/tablerelation.png" style="width: 518.0px; height: 449.0px;" /></a>
+<p class="caption"><span class="caption-text">Fig. 1: Entity Relationship Diagram for the DIVER, COMPETITION and RECORD Tables</span></p>
+</div>
+<p>DIVER table is the main table for diving section, contains sporters.
+COMPETITION table refers to DIVER table, contains diving competitions.
+RECORD table refers to both DIVER and COMPETITION tables, contains sporter records.</p>
+<div class="section" id="diver">
+<h3>DIVER:<a class="headerlink" href="#diver" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-plpgsql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">DIVER</span> <span class="p">(</span>
+     <span class="n">DIVERID</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+     <span class="k">NAME</span> <span class="nb">text</span><span class="p">,</span>
+     <span class="n">AGE</span> <span class="nb">INTEGER</span><span class="p">,</span>
+     <span class="n">COUNTRY</span> <span class="nb">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>DIVER table contains information about diving sporters.It has 1 major column which is primary key and 3 other information columns.
+DIVER table is independent from other tables, it references no other table.</p>
+<p>DIVERID is the unique ID of the sporter.
+NAME is the name of the sporter.
+AGE is the age of the sporter.
+COUNTRY is the country which sporter represents.</p>
+</div>
+<div class="section" id="competition">
+<h3>COMPETITION:<a class="headerlink" href="#competition" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-plpgsql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">COMPETITION</span> <span class="p">(</span>
+     <span class="n">COMPETITIONID</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+     <span class="n">WinnerID</span> <span class="nb">INTEGER</span> <span class="k">REFERENCES</span> <span class="n">DIVER</span><span class="p">(</span><span class="n">DIVERID</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CASCADE</span><span class="p">,</span>
+     <span class="k">YEAR</span> <span class="nb">INTEGER</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>COMPETITION table contains information about diving competitions.
+References to DIVER table due to its foreign key WinnerID.</p>
+<p>COMPETITIONID is the unique ID of a diving competition.
+WINNERID is the ID of the sporter who won the competition.
+YEAR is the date which the competition held.</p>
+</div>
+<div class="section" id="record">
+<h3>RECORD:<a class="headerlink" href="#record" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-plpgsql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nb">RECORD</span> <span class="p">(</span>
+      <span class="n">COMPETITIONID</span> <span class="nb">INTEGER</span> <span class="k">REFERENCES</span> <span class="n">COMPETITION</span><span class="p">(</span><span class="n">COMPETITIONID</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CASCADE</span><span class="p">,</span>
+      <span class="n">DIVERID</span> <span class="nb">INTEGER</span> <span class="k">REFERENCES</span> <span class="n">DIVER</span><span class="p">(</span><span class="n">DIVERID</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CASCADE</span><span class="p">,</span>
+      <span class="nb">RECORD</span> <span class="nb">INTEGER</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="n">COMPETITIONID</span><span class="p">,</span> <span class="n">DIVERID</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>RECORD table contains information about sporters record at a specific competition.
+It refers to both DIVER table and COMPETITION table via its foreign keys.
+Primary key is the combination of COMPETITIONID and DIVERID.</p>
+<p>CompetitionID is the unique ID of the competition.
+DiverID is the unique ID of the sporter.
+Record is the amount of height sporter dived from.</p>
+</div>
+<div class="section" id="class-codes-of-tables-from-diving-py">
+<h3>Class codes of Tables from diving.py:<a class="headerlink" href="#class-codes-of-tables-from-diving-py" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Diver</span><span class="p">:</span>
+ <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diverID</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">country</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">diverID</span> <span class="o">=</span> <span class="n">diverID</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">country</span>
+
+
+<span class="k">class</span> <span class="nc">Competition</span><span class="p">:</span>
+ <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">competitionID</span><span class="p">,</span> <span class="n">winnerID</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">=</span> <span class="n">competitionID</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">winnerID</span> <span class="o">=</span> <span class="n">winnerID</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+
+<span class="k">class</span> <span class="nc">Record</span><span class="p">:</span>
+ <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">competitionID</span><span class="p">,</span> <span class="n">diverID</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">=</span> <span class="n">competitionID</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">diverID</span> <span class="o">=</span> <span class="n">diverID</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">record</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="diving-category-codes-from-server-py-file">
+<h3>Diving category codes from server.py file:<a class="headerlink" href="#diving-category-codes-from-server-py-file" title="Permalink to this headline">¶</a></h3>
+<p>add1, update1, delete1 and find1 refers to DIVER table.
+add2, update2, delete2 and find2 refers to COMPETITION table.
+add3, update3, delete3 and find3 refers to RECORD table.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/diving&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">diving</span><span class="p">():</span>
+ <span class="n">ds</span> <span class="o">=</span> <span class="n">DiverStore</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">])</span>
+
+ <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+     <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">firstrun</span><span class="p">()</span>
+ <span class="k">else</span><span class="p">:</span>
+     <span class="k">if</span> <span class="s">&#39;add1&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+         <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+         <span class="n">age</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;age&#39;</span><span class="p">]</span>
+         <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;country&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">add_diver</span><span class="p">(</span><span class="n">Diver</span><span class="p">(</span><span class="n">diverID</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">country</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;add2&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">winnerID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;winnerID&#39;</span><span class="p">]</span>
+         <span class="n">year</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;year&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">add_diver</span><span class="p">(</span><span class="n">Competition</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">winnerID</span><span class="p">,</span> <span class="n">year</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;add3&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;diverID&#39;</span><span class="p">]</span>
+         <span class="n">record</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;record&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">add_diver</span><span class="p">(</span><span class="n">Record</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">diverID</span><span class="p">,</span> <span class="n">record</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+
+     <span class="k">elif</span> <span class="s">&#39;update1&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+         <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+         <span class="n">age</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;age&#39;</span><span class="p">]</span>
+         <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;country&#39;</span><span class="p">]</span>
+         <span class="n">searchID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;select&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">update_diver</span><span class="p">(</span><span class="n">Diver</span><span class="p">(</span><span class="n">diverID</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">country</span><span class="p">),</span> <span class="n">searchID</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;update2&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">winnerID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;winnerID&#39;</span><span class="p">]</span>
+         <span class="n">year</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;year&#39;</span><span class="p">]</span>
+         <span class="n">searchID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;select&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">update_diver</span><span class="p">(</span><span class="n">Competition</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">winnerID</span><span class="p">,</span> <span class="n">year</span><span class="p">),</span> <span class="n">searchID</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;update3&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;diverID&#39;</span><span class="p">]</span>
+         <span class="n">record</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;record&#39;</span><span class="p">]</span>
+         <span class="n">combinedSearchID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;select&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">update_diver</span><span class="p">(</span><span class="n">Record</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">diverID</span><span class="p">,</span> <span class="n">record</span><span class="p">),</span> <span class="n">combinedSearchID</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+
+     <span class="k">elif</span> <span class="s">&#39;find1&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+         <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+         <span class="n">age</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;age&#39;</span><span class="p">]</span>
+         <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;country&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">find_diver</span><span class="p">(</span><span class="n">Diver</span><span class="p">(</span><span class="n">diverID</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">country</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;find2&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">winnerID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;winnerID&#39;</span><span class="p">]</span>
+         <span class="n">year</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;year&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">find_diver</span><span class="p">(</span><span class="n">Competition</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">winnerID</span><span class="p">,</span> <span class="n">year</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+     <span class="k">elif</span> <span class="s">&#39;find3&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="n">competitionID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;competitionID&#39;</span><span class="p">]</span>
+         <span class="n">diverID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;diverID&#39;</span><span class="p">]</span>
+         <span class="n">record</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;record&#39;</span><span class="p">]</span>
+         <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">find_diver</span><span class="p">(</span><span class="n">Record</span><span class="p">(</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">diverID</span><span class="p">,</span> <span class="n">record</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+
+     <span class="k">elif</span> <span class="s">&#39;recreate&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="c">#  create new tables and add some rows</span>
+         <span class="n">ds</span><span class="o">.</span><span class="n">recreate</span><span class="p">()</span>
+         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;diving&#39;</span><span class="p">))</span>
+     <span class="k">elif</span> <span class="s">&#39;return&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+         <span class="c">#  return to main diving page</span>
+          <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;diving&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-operation-from-diving-py-file">
+<h3>Add operation from diving.py file:<a class="headerlink" href="#add-operation-from-diving-py-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">add_diver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+     <span class="k">try</span><span class="p">:</span>
+         <span class="n">ValidateInput</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;Diving/InvalidValue.html&#39;</span><span class="p">,</span> <span class="n">divers</span><span class="o">=</span><span class="n">divers</span><span class="p">)</span>
+
+     <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbf</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+         <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+         <span class="k">if</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO DIVER (DIVERID, NAME, AGE, COUNTRY)</span>
+<span class="s">                         VALUES (&#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO COMPETITION (COMPETITIONID, WinnerID, YEAR)</span>
+<span class="s">                         VALUES (&#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO RECORD (COMPETITIONID, DIVERID, Record)</span>
+<span class="s">                         VALUES (&#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;, &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
+
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+         <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;diving&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-operation-from-diving-py-file">
+<h3>Update operation from diving.py file:<a class="headerlink" href="#update-operation-from-diving-py-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">update_diver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+     <span class="k">try</span><span class="p">:</span>
+         <span class="n">ValidateInput</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;Diving/InvalidValue.html&#39;</span><span class="p">,</span> <span class="n">divers</span><span class="o">=</span><span class="n">divers</span><span class="p">)</span>
+
+     <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbf</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+         <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+         <span class="k">if</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE DIVER</span>
+<span class="s">                         SET DIVERID=&#39;</span><span class="si">%s</span><span class="s">&#39;, NAME=&#39;</span><span class="si">%s</span><span class="s">&#39;, AGE=&#39;</span><span class="si">%s</span><span class="s">&#39;, COUNTRY=&#39;</span><span class="si">%s</span><span class="s">&#39;</span>
+<span class="s">                         WHERE (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE COMPETITION</span>
+<span class="s">                         SET COMPETITIONID=&#39;</span><span class="si">%s</span><span class="s">&#39;, WinnerID=&#39;</span><span class="si">%s</span><span class="s">&#39;, YEAR=&#39;</span><span class="si">%s</span><span class="s">&#39;</span>
+<span class="s">                         WHERE (COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+             <span class="n">ids</span> <span class="o">=</span> <span class="nb">id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE DIVER</span>
+<span class="s">                         SET COMPETITIONID=&#39;</span><span class="si">%s</span><span class="s">&#39;, DIVERID=&#39;</span><span class="si">%s</span><span class="s">&#39;, RECORD=&#39;</span><span class="si">%s</span><span class="s">&#39;</span>
+<span class="s">                         WHERE ((COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;) AND (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;))&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">record</span><span class="p">,</span> <span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ids</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+         <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;diving&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-operation-from-diving-py-file">
+<h3>Delete operation from diving.py file:<a class="headerlink" href="#delete-operation-from-diving-py-file" title="Permalink to this headline">¶</a></h3>
+<p>Deletes a record from database by ID</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">delete_diver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+     <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbf</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+         <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+         <span class="k">if</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM DIVER WHERE (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM COMPETITION WHERE (COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+             <span class="n">ids</span> <span class="o">=</span> <span class="nb">id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM RECORD WHERE ((COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;) AND (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;))&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ids</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+         <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;diving&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-operation-from-diving-py-file">
+<h3>Find operation from diving.py file:<a class="headerlink" href="#find-operation-from-diving-py-file" title="Permalink to this headline">¶</a></h3>
+<p>Find operation lets you find a record by using only a part of information.
+By searching for name &#8220;J&#8221; you can find names with John and James.
+For searching operation it is not neccesary to use data for all columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">find_diver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+     <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbf</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+         <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+         <span class="k">if</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">diverID</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">age</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+
+             <span class="n">data</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+             <span class="n">data</span><span class="o">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT DIVERID, NAME, AGE, COUNTRY FROM DIVER</span>
+<span class="s">                         WHERE (</span>
+<span class="s">                         ((&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;))</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;&#39; ) OR (UPPER(NAME) LIKE &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (AGE = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;&#39; ) OR (UPPER(COUNTRY) = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         )&quot;&quot;&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;%&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="p">)</span>
+             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+             <span class="n">divers</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+             <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;Diving/searchdiver.html&#39;</span><span class="p">,</span> <span class="n">divers</span><span class="o">=</span><span class="n">divers</span><span class="p">)</span>
+
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span> <span class="o">==</span> <span class="s">&#39;-1&#39;</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="s">&#39;-1&#39;</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT * FROM COMPETITION</span>
+<span class="s">                         WHERE (</span>
+<span class="s">                         ((&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;))</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (WinnerID = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (YEAR = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         )&quot;&quot;&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">winnerID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+             <span class="n">competitions</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+             <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;Diving/searchcompetition.html&#39;</span><span class="p">,</span> <span class="n">competitions</span><span class="o">=</span><span class="n">competitions</span><span class="p">)</span>
+
+         <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">diverID</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">record</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                 <span class="n">data</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+             <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT * FROM RECORD</span>
+<span class="s">                         WHERE (</span>
+<span class="s">                         ((&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (COMPETITIONID = &#39;</span><span class="si">%s</span><span class="s">&#39;))</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (DIVERID = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         AND( (&#39;</span><span class="si">%s</span><span class="s">&#39; = &#39;-1&#39;) OR (RECORD = &#39;</span><span class="si">%s</span><span class="s">&#39;) )</span>
+<span class="s">                         )&quot;&quot;&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">competitionID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">diverID</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">record</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
+             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+             <span class="n">records</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+             <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;Diving/searchrecord.html&#39;</span><span class="p">,</span> <span class="n">records</span><span class="o">=</span><span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="table-creations-from-diving-py-file">
+<h3>Table creations from diving.py file:<a class="headerlink" href="#table-creations-from-diving-py-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">create_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+     <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbf</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+         <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS DIVER (</span>
+<span class="s">                     DIVERID INTEGER PRIMARY KEY NOT NULL,</span>
+<span class="s">                     NAME text,</span>
+<span class="s">                     AGE INTEGER,</span>
+<span class="s">                     COUNTRY text)&quot;&quot;&quot;</span>
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS COMPETITION (</span>
+<span class="s">                     COMPETITIONID INTEGER PRIMARY KEY NOT NULL,</span>
+<span class="s">                     WinnerID INTEGER REFERENCES DIVER(DIVERID) ON DELETE RESTRICT ON UPDATE CASCADE,</span>
+<span class="s">                     YEAR INTEGER)&quot;&quot;&quot;</span>
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+         <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS RECORD (</span>
+<span class="s">                     COMPETITIONID INTEGER REFERENCES COMPETITION(COMPETITIONID) ON DELETE RESTRICT ON UPDATE CASCADE,</span>
+<span class="s">                     DIVERID INTEGER REFERENCES DIVER(DIVERID) ON DELETE RESTRICT ON UPDATE CASCADE,</span>
+<span class="s">                     RECORD INTEGER DEFAULT NULL,</span>
+<span class="s">                     PRIMARY KEY(COMPETITIONID, DIVERID))&quot;&quot;&quot;</span>
+         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+         <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parts Implemented by ANIL YILDIRIM</a><ul>
+<li><a class="reference internal" href="#database-tables">Database Tables</a><ul>
+<li><a class="reference internal" href="#diver">DIVER:</a></li>
+<li><a class="reference internal" href="#competition">COMPETITION:</a></li>
+<li><a class="reference internal" href="#record">RECORD:</a></li>
+<li><a class="reference internal" href="#class-codes-of-tables-from-diving-py">Class codes of Tables from diving.py:</a></li>
+<li><a class="reference internal" href="#diving-category-codes-from-server-py-file">Diving category codes from server.py file:</a></li>
+<li><a class="reference internal" href="#add-operation-from-diving-py-file">Add operation from diving.py file:</a></li>
+<li><a class="reference internal" href="#update-operation-from-diving-py-file">Update operation from diving.py file:</a></li>
+<li><a class="reference internal" href="#delete-operation-from-diving-py-file">Delete operation from diving.py file:</a></li>
+<li><a class="reference internal" href="#find-operation-from-diving-py-file">Find operation from diving.py file:</a></li>
+<li><a class="reference internal" href="#table-creations-from-diving-py-file">Table creations from diving.py file:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="member4.html"
+                        title="previous chapter">Parts Implemented by Ercan Alp Serteli</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developer/member5.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member4.html" title="Parts Implemented by Ercan Alp Serteli"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Developer Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Team Name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,331 @@
+{% extends "WaterPolo/WaterPolo_Layout.html" %}
+
+{% block title %} - Spear Fisher Page{% endblock %}
+
+{% block body %}
+
+<h1> Spear Fisher Page </h1>
+
+<form action="{{ url_for('spear_fishing') }}" method="post">
+		<table class="table table-bordered">
+			<thead>
+
+		<tr class = "info">
+			<th> </th>
+			<th>Fisher Name</th>
+			<th>Fisher Surname</th>
+			<th>Team id</th>
+			<th>Team Name</th>
+			<th>Degree</th>
+			<th>Point</th>
+			</tr>
+		</thead>
+	    <tbody>
+
+		{% for fisher_id,fisher_name,fisher_surname,team_id,team_name,degree,point in fishers %}
+		<tr class = "danger">
+				<td> <input type="radio" name="select"value="{{fisher_id}}" /> </td>
+				<td> {{fisher_name}} </td>
+				<td> {{fisher_surname}} </td>
+				<td> {{team_id}} </td>
+				<td> {{team_name}} </td>
+				<td> {{degree}} </td>
+				<td> {{point}} </td>
+
+	    </tr>
+	    {% endfor %}
+	    </tbody>
+
+	</table>
+	 <button style = "margin:25px" type="submit" class="btn btn-success btn-md" data-toggle="modal" data-target="#add_fisher"> Add Fisher</button>
+	 <input style = "margin:25px"  type="submit" name="Delete_Fisher" value="Delete Fisher" class="btn btn-danger btn-md"  />
+	 <input style = "margin:25px"  type="submit" name="Upd_Fisher" value="Update Fisher" class="btn btn-info btn-md"  />
+
+
+<div class="modal fade" id="add_fisher" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content" style="background-color: aliceblue;">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Adding Fisher</h4>
+        </div>
+        <div class="modal-body">
+		<div class="alert alert-danger" role="alert"> </div>
+		<table class="table table-bordered">
+			<thead>
+
+		<tr class = "info">
+			<th> </th>
+			<th>Name</th>
+			<th>Surname</th>
+			<th>Team id</th>
+			<th>Team Name</th>
+			<th>Degree</th>
+			<th>Point</th>
+		</thead>
+		<tbody>
+
+
+	    <tr>
+			<td> </td>
+			<td> <input type="text" name="fisher_name" value="" />    </td>
+			<td> <input type="text" name="fisher_surname" value="" /> </td>
+			<td> <input type="text" name="team_id" value="" /> </td>
+			<td> <input type="text" name="team_name" value="" /> </td>
+			<td> <input type="text" name="degree" value="" /> </td>
+			<td> <input type="text" name="point" value="" /> </td>
+	    </tr>
+	</table>
+        </div>
+        <div class="modal-footer">
+         <a href="/spear_fishing"  class="btn btn-default" data-dismiss="modal">Close</a>
+		<input  type="submit" class="btn btn-default"  name="Add_Fisher" value="Add Fisher"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+<h1> Point Table </h1>
+
+<form action="{{ url_for('spear_fishing') }}" method="post">
+	<table class="table table-bordered">
+	<thead>
+		<tr class = "warning">
+
+			<th></th>
+			<th>Fisher id</th>
+			<th>Fisher Name</th>
+			<th>Fish Name</th>
+			<th>Gram</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		{% for id,fisher_id,fisher_name,fish_name,gram in point %}
+			<tr class = "info">
+				<td><input type="radio" name="select"value="{{id}}" /></td>
+				<td> {{fisher_id}} </td>
+				<td> {{fisher_name}} </td>
+				<td> {{fish_name}} </td>
+				<td> {{gram}} </td>
+
+
+		    </tr>
+		{% endfor %}
+
+	   </tbody>
+	</table>
+	<button style = "margin:25px"	class="btn btn-success btn-md" data-toggle="modal" data-target="#add_point">Add Point</button>
+	<input style = "margin:25px"	class="btn btn-danger btn-md" type="submit" name="Delete_Point"value="Delete Point" />
+	<input style = "margin:25px"  type="submit" name="Upd_Point" value="Update Point" class="btn btn-info btn-md" />
+	<input style = "margin:25px"	class="btn btn-warning btn-md" type="submit" name="init_table"value="Reset Tables" />
+
+
+<div class="modal fade" id="add_point" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content" style="background-color: aliceblue;">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Adding Point</h4>
+        </div>
+        <div class="modal-body">
+		<div class="alert alert-info" role="alert"> </div>
+		<table class="table table-bordered">
+			<thead>
+
+		<tr class = "danger">
+			<th> </th>
+			<th>Fisher id</th>
+			<th>Fisher Name</th>
+			<th>Fish Name</th>
+			<th>Gram</th>
+		</thead>
+		<tbody>
+
+
+	    <tr>
+			<td> </td>
+			<td> <input type="text" name="fisher_id" value="" />    </td>
+			<td> <input type="text" name="fisher_name" value="" /> </td>
+			<td> <input type="text" name="fish_name" value="" /> </td>
+			<td> <input type="text" name="gram" value="" /> </td>
+	    </tr>
+	</table>
+        </div>
+        <div class="modal-footer">
+         <a href="/spear_fishing"  class="btn btn-default" data-dismiss="modal">Close</a>
+		<input  type="submit" class="btn btn-default"  name="Add_Point" value="Add Point"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+
+<h1> Team Table </h1>
+
+
+<form action="{{ url_for('spear_fishing') }}" method="post">
+	<table class="table table-bordered">
+	<thead>
+		<tr class = "warning">
+
+			<th></th>
+			<<th>Team Name</th>
+			<th>Team Degree</th>
+			<th>Team Point</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for team_id,team_name,team_degree,team_point in team %}
+			<tr class = "info">
+				<td><input type="radio" name="select"value="{{team_id}}" /></td>
+				<td> {{team_name}}   </td>
+				<td> {{team_degree}}   </td>
+				<td> {{team_point}} </td>
+
+
+		    </tr>
+		{% endfor %}
+
+	</tbody>
+	</table>
+	<button style = "margin:25px"	class="btn btn-success btn-md" data-toggle="modal" data-target="#add_team">Add Team</button>
+	<input style = "margin:25px"	class="btn btn-danger btn-md" type="submit" name="Delete_Team"value="Delete Team"/>
+	<input style = "margin:25px"  type="submit" name="Upd_Team" value="Update Team" class="btn btn-info btn-md" />
+
+	<div class="modal fade" id="add_team" role="dialog">
+    	<div class="modal-dialog">
+
+      		<!-- Modal content-->
+      		<div class="modal-content"style="background-color: aliceblue; margin-left: 250px; margin-right: 250px;">
+        		<div class="modal-header">
+          			<button type="button" class="close" data-dismiss="modal">×</button>
+          			<h4 class="modal-title">Adding Team</h4>
+            </div>
+        <div class="modal-body">
+			<div class="alert alert-info" role="alert"> </div>
+				<table class="table table-bordered">
+					<thead>
+
+						<tr class = "danger">
+						<th></th>
+						<th>Team Name</th>
+						<th>Team Degree</th>
+						<th>Team Point</th>
+
+					</thead>
+
+					<tbody>
+
+	    				<tr>
+						<td> </td>
+						<td> <input type="text" name="team_name" value="" />    </td>
+						<td> <input type="text" name="team_degree" value="" /> </td>
+						<td> <input type="text" name="team_point" value="" /> </td>
+	    				</tr>
+
+				</table>
+        </div>
+
+        <div class="modal-footer">
+        	<a href="/spear_fishing"  class="btn btn-default" data-dismiss="modal">Close</a>
+			<input  type="submit" class="btn btn-default"  name="Add_Team" value="Add Team"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<h1> Maximum Gram </h1>
+
+			<div class = "table-responsive">
+				<table  class ="table">
+
+					<tr>
+						<th>Fisher Name</th>
+						<th>Fisher Surname</th>
+						<th>Fish Name</th>
+						<th>Gram</th>
+					</tr>
+		 {% for fisher_name,fisher_surname,fish_name,gram in max_gram %}
+					<tr>
+
+						<td> {{fisher_name}}   </td>
+						<td> {{fisher_surname}}   </td>
+						<td> {{fish_name}} </td>
+						<td> {{gram}} </td>
+
+	   				</tr>
+		{% endfor %}
+
+				</table>
+		   </div>
+
+		   <h1> Minumum 1.5 kg fish </h1>
+
+			<div class = "table-responsive">
+				<table  class ="table">
+
+					<tr>
+						<th>Fisher Name</th>
+						<th>Fisher Surname</th>
+						<th>Fish Name</th>
+						<th>Gram</th>
+						<th>Team Name</th>
+						<th>Team Point</th>
+					</tr>
+		 {% for fisher_name,fisher_surname,fish_name,gram,team_name,team_point in min_fish %}
+					<tr>
+
+						<td> {{fisher_name}}   </td>
+						<td> {{fisher_surname}}   </td>
+						<td> {{fish_name}} </td>
+						<td> {{gram}} </td>
+						<td> {{team_name}} </td>
+						<td> {{team_point}} </td>
+
+	   				</tr>
+		{% endfor %}
+
+				</table>
+		   </div>
+
+
+		   <h1> Both Team and Individual Leaders </h1>
+
+			<div class = "table-responsive">
+				<table  class ="table">
+
+					<tr>
+						<th>Fisher Name</th>
+						<th>Fisher Surname</th>
+						<th>Team Name</th>
+					</tr>
+		 {% for fisher_name,fisher_surname,team_name in leader %}
+					<tr>
+
+						<td> {{fisher_name}}   </td>
+						<td> {{fisher_surname}}   </td>
+						<td> {{team_name}} </td>
+
+
+	   				</tr>
+		{% endfor %}
+
+				</table>
+		   </div>
+
+
+
+
+
+
+{% endblock %}

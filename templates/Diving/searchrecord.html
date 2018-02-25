@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %} - RECORD Search Results{% endblock %}
+
+{% block body %}
+<form action="{{ url_for('diving') }}" method="post">
+	<table>
+	<input class="updateButton" type="submit" name="return"value="Return to Main Page of Diving" />
+</form>
+
+<br><br>
+
+<h2> RECORD Search Results </h2>
+<form action="{{ url_for('diving') }}" method="post">
+	<table class="table table-bordered">
+		<tr class="success">
+			<th> </th>
+			<th>CompetitionID</th>
+			<th>DiverID</th>
+			<th>Record</th>
+		</tr>
+		{% for competitionID, diverID, record in records %}
+			<tr class="active">
+				<td> <input type="radio" name="select"value="{{competitionID ~ '-' ~ diverID}}" /> </td>
+				<td> {{competitionID}} </td>
+				<td> {{diverID}} </td>
+				<td> {{record}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="competitionID" value="" />    </td>
+			<td> <input type="text" name="diverID" value="" />  </td>
+			<td> <input type="text" name="record" value="" /></td>
+	    </tr>
+	</table>
+	<input class="addButton" type="submit" name="add3" value = "Add" />
+	<input class="deleteButton" type="submit" name="delete3" value="Delete" />
+	<input class="updateButton" type="submit" name="update3" value="Update" />
+	<input class="findButton" type="submit" name="find3" value="Find"   />
+</form>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %} - Power Boat Racing {% endblock %}
+
+{% block body %}
+<h3>Except </h3>
+
+* takım kaptanları haricindeki bütün oyuncular
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>Person&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+		</tr>
+		 {% for id,person in minus %}
+			<tr>
+				<td></td>
+				<td> {{id}}   </td>
+				<td> {{person}}   </td>
+
+	    </tr>
+		{% endfor %}
+<table>
+
+<hr>
+
+
+<br><hr><a href="/drivers"> Return Back ! </a>
+
+{% endblock %}

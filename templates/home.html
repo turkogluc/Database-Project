@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Water Sports</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}" />
+	<script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+
+  <style>
+  body {
+      position: relative;
+  }
+  #section1 {padding-top:50px;height:500px;color: #fff; background-color: #1E88E5;}
+  #section2 {padding-top:50px;height:500px;color: #fff; background-color: #673ab7;}
+  #section3 {padding-top:50px;height:500px;color: #fff; background-color: #ff9800;}
+  #section4 {padding-top:50px;height:500px;color: #fff; background-color: #00bcd4;}
+  #section5 {padding-top:50px;height:500px;color: #fff; background-color: #009688;}
+  </style>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Water Sports</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="#section1">Spearfishing</a></li>
+          <li><a href="#section2">Power Boat Racing</a></li>
+          <li><a href="#section3">Water Polo</a></li>
+          <li><a href="#section4">Underwater Photography</a></li>
+          <li><a href="#section5">Diving</a></li>
+          {% if session['username'] %}
+        	<li><a href="/logout">{{ session['username'] }} - Log out</a></li>
+        	{% if session['admin'] %}
+        		<li><a href="/users">Modify Users</a></li>
+        	{% endif %}
+       	{% else %}
+        	<li><a href="/login">Login</a></li>
+       		<li><a href="/signup">Sign Up</a></li>
+       	{% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="section1" class="container-fluid">
+
+  <h1>Spearfishing</h1>
+  <h4>Spearfishing is an ancient method of fishing that has been used throughout the world for millennia. Early civilizations were familiar with the custom of spearing fish from rivers and streams using sharpened sticks.
+
+Today modern spearfishing makes use of elastic powered spearguns and slings, or compressed gas pneumatic powered spearguns, to strike the hunted fish. Specialised techniques and equipment have been developed for various types of aquatic environments and target fish.
+
+Spearfishing may be done using free-diving, snorkelling, or scuba diving techniques. Spearfishing while using scuba equipment is illegal in some countries. The use of mechanically powered spearguns is also outlawed in some countries and jurisdictions. Spearfishing is highly selective, normally uses no bait and has no by-catch.</h4>
+<a style = "margin:25px"  type="submit" class="btn btn-info btn-md"  href="/spear_fishing">Visit Spearfishing Page</a></li>
+</div>
+
+
+
+<div id="section2" class="container-fluid">
+  <h1>Power Boat Racing</h1>
+ <h4>Powerboat racing is a type of racing by ocean-going powerboats, typically point-to-point racing.
+
+In Europe, Middle East and Asia, offshore powerboat racing is led by the Union Internationale Motonautique (UIM) regulated Class 1 and Powerboat GPS] (formerly known as Powerboat P1) In the USA, offshore powerboat racing is led by the APBA/UIM and consists of races hosted by OPA Racing, OSS, and P1.
+
+The sport is financed by a mixture of private funding and commercial sponsors</h4>
+<a style = "margin:25px"  type="submit" class="btn btn-info btn-md"  href="/drivers">Visit Powerboat Racing Page</a></li>
+</div>
+
+
+
+<div id="section3" class="container-fluid">
+  <h1>Water Polo</h1>
+<h4>Water polo is a team water sport. The game consists of 4 quarters in which the two teams attempt to score goals by throwing the ball into their opponent's goal, with the team with the most goals at the end of the game winning the match. A team consists of 6 field players and one goalkeeper in the water at any one time. In addition to this, teams may have substitute field players and one substitute goalkeeper who are not in the water. Water polo is typically played in an all-deep pool (usually at least 1.8 m deep or 5.9 feet), and players require stamina and endurance to play the game.
+
+Water polo is a contact sport. Minor fouls occur frequently and exclusion fouls (in which a player is suspended from the game for 20 seconds) are common.
+
+Special equipment for water polo includes a water polo ball, which floats on the water; numbered and colored caps; and goals, which either float in the water or are attached to the side of the pool.</h4>
+  <a style = "margin:25px"  type="submit" class="btn btn-info btn-md"  data-toggle="modal" data-target="#Water_Polo">Visit Water Polo Page</a></li>
+</div>
+
+<div class="modal fade" id="Water_Polo" role="dialog">
+    <div class="modal-dialog" style ="padding-left: 300px; padding-right: 300px;" >
+
+      <!-- Modal content-->
+      <div class="modal-content"style="background-color: rgb(224, 245, 219);">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Initialization Process</h4>
+        </div>
+        <div class="modal-body">
+		<div class="alert alert-info" role="alert"> <strong>Welcome!</strong> You will redirecting to <strong>Water Polo </strong> page right now. </div>
+        </div>
+        <div class="modal-footer">
+         <a href="/Water_Polo" class="btn btn-default" data-dismiss="modal">Close</a>
+		<a href="/Water_Polo" class="btn btn-default" role="button">GO to page</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+<div id="section4" class="container-fluid">
+  <h1>Underwater Photography</h1>
+  <h4>Underwater photography is the process of taking photographs while under water. It is usually done while scuba diving, but can be done while diving on surface supply, snorkeling, swimming, from a submersible or remotely operated underwater vehicle, or from automated cameras lowered from the surface.
+
+Underwater photography can also be categorised as an art form and a method for recording data.</h4>
+<a style = "margin:25px"  type="submit" class="btn btn-info btn-md"  href="/underwater_photography">Visit Underwater Photography Page</a></li>
+</div>
+
+
+
+<div id="section5" class="container-fluid">
+  <h1>Diving</h1>
+  <h4>Diving is the sport of jumping or falling into water from a platform or springboard, usually while performing acrobatics. Diving is an internationally recognized sport that is part of the Olympic Games. In addition, unstructured and non-competitive diving is a recreational pastime.
+
+Diving is one of the most popular Olympic sports with spectators. Competitors possess many of the same characteristics as gymnasts and dancers, including strength, flexibility, kinaesthetic judgment and air awareness. Some professional divers were originally gymnasts or dancers as both the sports have similar characteristics to diving.</h4>
+<a style = "margin:25px"  type="submit" class="btn btn-info btn-md"  href="/diving">Visit Diving Page</a></li>
+</div>
+
+</body>
+</html>

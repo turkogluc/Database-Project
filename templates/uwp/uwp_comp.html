@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %} - Underwater Photography {% endblock %}
+
+<!--  {% block Category1 %} <a href="/underwater_photography/competitors">Competitors</a> {% endblock %}
+{% block Category2 %} <a href="/underwater_photography/teams">Teams</a> {% endblock %}-->
+{% block Category1Link %} "/underwater_photography/competitors" {% endblock %}
+{% block Category1Name %} Competitors {% endblock %}
+{% block Category2Link %} "/underwater_photography/teams" {% endblock %}
+{% block Category2Name %} Teams {% endblock %}
+
+{% block body %}
+<h1> Competitor List </h1>
+<form action="{{ url_for('uwp_comp') }}" method="post">
+	<table>
+		<tr>
+			<th> </th>
+			<th>Name</th>
+			<th>Surname</th>
+			<th>Country</th>
+			<th>Role</th>
+		</tr>
+		{% for id, name, surname, country, role in competitors %}
+			<tr>
+				<td> <input type="radio" name="select"value="{{id}}" /> </td>
+				<td> {{name}} </td>
+				<td> {{surname}} </td>
+				<td> {{country}} </td>
+				<td> {{role}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="Name" value="" placeholder="Name" /> </td>
+			<td> <input type="text" name="Surname" value="" placeholder="Surname"/> </td>
+			<td> <select name="Country">
+				{% for country in countries %}
+				  <option value="{{country}}">{{country}}</option>
+				{% endfor %}
+				</select>
+			</td>
+			<td> <select name="Role">
+				 {% for role in roles %}
+				  <option value="{{role}}">{{role}}</option>
+				{% endfor %}
+				</select>
+			</td>
+	    </tr>
+	</table>
+	<input type="submit" name="Add"value="Add" />
+	<input type="submit" name="Delete"value="Delete" />
+	<input type="submit" name="Update"value="Update" />
+	<input type="submit" name="Reset"value="Reset Table" />
+</form>
+
+<footer>Ercan Alp Serteli</footer>
+{% endblock %}

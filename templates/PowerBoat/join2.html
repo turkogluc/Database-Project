@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %} - Power Boat Racing {% endblock %}
+
+{% block body %}
+
+<h3>Joining league 2015 and boats tables.</h3>
+
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>pos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>league15.boat</th>
+			<th>point</th>
+			<th>boats.id</th>
+			<th>driver</th>
+			<th>speed</th>
+
+		</tr>
+		 {% for pos,league15boat,point,boatsid,driver,speed in joinsec %}
+			<tr>
+				<td></td>
+				<td> {{pos}}   </td>
+				<td> {{league15boat}} </td>
+				<td> {{point}} </td>
+				<td> {{boatsid}}   </td>
+				<td> {{driver}} </td>
+				<td> {{speed}} </td>
+
+
+	    </tr>
+		{% endfor %}
+<table>
+
+<br><hr><a href="/drivers"> Return Back ! </a>
+
+{% endblock %}

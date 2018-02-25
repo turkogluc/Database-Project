@@ -1,0 +1,920 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parts Implemented by Ercan Alp Serteli &mdash; itucsdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="itucsdb 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Developer Guide" href="index.html" />
+    <link rel="next" title="Parts Implemented by ANIL YILDIRIM" href="member5.html" />
+    <link rel="prev" title="Parts Implemented by Member Name" href="member3.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member5.html" title="Parts Implemented by ANIL YILDIRIM"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Developer Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parts-implemented-by-ercan-alp-serteli">
+<h1>Parts Implemented by Ercan Alp Serteli<a class="headerlink" href="#parts-implemented-by-ercan-alp-serteli" title="Permalink to this headline">¶</a></h1>
+<p>I have implemented three database tables: competitors, teams and users. The first two tables are regarding the Underwater Photography and they are managed by the <em>UWP</em> class. The users table is managed by the <em>Users</em> class.</p>
+<p>Here, I will explain everything technical that is related to these entities including SQL code, Python code and HTML code.</p>
+<div class="section" id="uwp-class">
+<h2>UWP Class<a class="headerlink" href="#uwp-class" title="Permalink to this headline">¶</a></h2>
+<p>The <em>UWP</em> class includes all the methods that are needed to manage the <em>competitor</em> and <em>team</em> tables</p>
+<div class="section" id="init-method">
+<h3>init Method<a class="headerlink" href="#init-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsn</span><span class="p">):</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">dsn</span> <span class="o">=</span> <span class="n">dsn</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+      <span class="n">query</span> <span class="o">=</span>  <span class="s">&quot;&quot;&quot;DO $$</span>
+<span class="s">                  BEGIN</span>
+<span class="s">                      IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = &#39;role&#39;) THEN</span>
+<span class="s">                          CREATE TYPE role AS ENUM (&#39;Photographer&#39;, &#39;Assistant&#39;, &#39;Captain&#39;);</span>
+<span class="s">                      END IF;</span>
+<span class="s">                  END$$&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS team (</span>
+<span class="s">                  id serial PRIMARY KEY,</span>
+<span class="s">                  country text NOT NULL)&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS competitor (</span>
+<span class="s">                  id serial PRIMARY KEY,</span>
+<span class="s">                  name text NOT NULL,</span>
+<span class="s">                  surname text NOT NULL,</span>
+<span class="s">                  role role NOT NULL,</span>
+<span class="s">                  team_id integer REFERENCES team (id))&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+  <span class="k">return</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the method that gets called when the UWP object is created. It gets the dsn by a parameter and saves it in its field for later use. Then it attempts to create the role type and the two tables if they do not exist. These SQL statements do nothing if the database has been initialized properly. They are there in case the application might be needed to run in a new database or some of the tables are dropped for some reason.</p>
+</div>
+<div class="section" id="show-page-comp-method">
+<h3>show_page_comp Method<a class="headerlink" href="#show-page-comp-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">show_page_comp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT competitor.id, name, surname, country, role FROM competitor, team</span>
+<span class="s">                  WHERE (team_id = team.id)&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">competitors</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT country FROM team&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">countries</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
+          <span class="n">countries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT DISTINCT role FROM competitor&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">roles</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
+          <span class="n">roles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;uwp/uwp_comp.html&#39;</span><span class="p">,</span> <span class="n">competitors</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">competitors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                         <span class="n">countries</span> <span class="o">=</span> <span class="n">countries</span><span class="p">,</span> <span class="n">roles</span> <span class="o">=</span> <span class="n">roles</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method is called when a HTTP GET is requested for the competitors page. It gets the data that is needed to construct the competitor list from the database and renders the page with that data as the parameter. It sorts the list by the first names before using it.
+In the first select statement, we get the data of all competitors by joining the competitor and team tables over team_id. This way, we can display the countries that each competitor belongs to as well as their other attributes.
+The second select statement is used to get all the countries from the team table so that they can be shown in a dropdown menu when adding or updating rows.
+The last select statement gets the roles that are used in the competitor table for a dropdown menu again. I just noticed that this is a very bad way of doing this. It should get them from the type instead of the table. However it is too late to fix this now.</p>
+</div>
+<div class="section" id="show-page-team-method">
+<h3>show_page_team Method<a class="headerlink" href="#show-page-team-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">show_page_team</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT team.id, country, COUNT(competitor.id)</span>
+<span class="s">                  FROM team LEFT JOIN competitor  ON team_id = team.id</span>
+<span class="s">                  GROUP BY team.id&quot;&quot;&quot;</span>
+
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">teams</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;uwp/uwp_teams.html&#39;</span><span class="p">,</span> <span class="n">teams</span> <span class="o">=</span> <span class="n">teams</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method is for showing the teams page. It gets the team data and the number of competitors in each team by joining the team and competitor tables. Left join is used because we want to get all the teams in the list whether they have any members or not.</p>
+</div>
+<div class="section" id="add-competitor-method">
+<h3>add_competitor Method<a class="headerlink" href="#add-competitor-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO competitor (name, surname, role, team_id)</span>
+<span class="s">               SELECT </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, team.id</span>
+<span class="s">               FROM team WHERE team.country = </span><span class="si">%s</span><span class="s"></span>
+<span class="s">               &quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surname</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">country</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">From now on, in most methods only a relevant part of the method is pasted</p>
+</div>
+</div></blockquote>
+<p>This method is used to insert a row into the competitor table. The team_id needed is selected from team using the country.</p>
+</div>
+<div class="section" id="delete-competitor-method">
+<h3>delete_competitor Method<a class="headerlink" href="#delete-competitor-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM competitor WHERE id = </span><span class="si">%s</span><span class="s">&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is a very simple method as it only gets an id and deletes the row with that id from the table.</p>
+</div>
+<div class="section" id="update-competitor-method">
+<h3>update_competitor Method<a class="headerlink" href="#update-competitor-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE competitor</span>
+<span class="s">         SET name=</span><span class="si">%s</span><span class="s">,surname=</span><span class="si">%s</span><span class="s">,role=</span><span class="si">%s</span><span class="s">,team_id=subquery.id</span>
+<span class="s">         FROM (SELECT team.id FROM team WHERE team.country = </span><span class="si">%s</span><span class="s">)</span>
+<span class="s">         AS subquery</span>
+<span class="s">         WHERE competitor.id = </span><span class="si">%s</span><span class="s">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surname</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method updates a row in the competitor table with the new data. It uses the name, surname and role inputs directly while it gets the team_id using a subquery that uses the country input.</p>
+</div>
+<div class="section" id="add-team-method">
+<h3>add_team Method<a class="headerlink" href="#add-team-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO team (country)</span>
+<span class="s">         VALUES (</span><span class="si">%s</span><span class="s">)&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">country</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Self explanatory method that adds a new row to the team table.</p>
+</div>
+<div class="section" id="update-team-method">
+<h3>update_team Method<a class="headerlink" href="#update-team-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE team</span>
+<span class="s">            SET country = </span><span class="si">%s</span><span class="s"></span>
+<span class="s">            WHERE id = </span><span class="si">%s</span><span class="s">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">country</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Self explanatory method that updates new row in the team table.</p>
+</div>
+<div class="section" id="delete-team-method">
+<h3>delete_team Method<a class="headerlink" href="#delete-team-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT team.id, country, COUNT(competitor.id)</span>
+<span class="s">            FROM team LEFT JOIN competitor  ON team_id = team.id</span>
+<span class="s">            WHERE team.id = </span><span class="si">%s</span><span class="s"> GROUP BY team.id</span>
+<span class="s">            &quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,))</span>
+<span class="nb">id</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="n">members</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">members</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You cannot delete a team that has members in the competitor list!&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM team WHERE id = </span><span class="si">%s</span><span class="s">&quot;</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method is used for deleting a row from the team table. However, it has to check if there are any members of the team before attempting to delete it. So, it gets the number of members in a team in the same way show_page_team does. Then checks if the number is 0. If it is, then it is deleted. Otherwise, it pops a flash message and reloads the page.</p>
+</div>
+<div class="section" id="reset-table-method">
+<h3>reset_table Method<a class="headerlink" href="#reset-table-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;DROP TABLE IF EXISTS competitor;</span>
+<span class="s">            DROP TABLE IF EXISTS team;</span>
+<span class="s">            DROP TYPE IF EXISTS role;&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;CREATE TYPE role AS ENUM (&#39;Photographer&#39;, &#39;Assistant&#39;, &#39;Captain&#39;)&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE team (</span>
+<span class="s">            id serial PRIMARY KEY,</span>
+<span class="s">            country text NOT NULL)&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE competitor (</span>
+<span class="s">            id serial PRIMARY KEY,</span>
+<span class="s">            name text NOT NULL,</span>
+<span class="s">            surname text NOT NULL,</span>
+<span class="s">            role role NOT NULL,</span>
+<span class="s">            team_id integer REFERENCES team (id))&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO team (country)</span>
+<span class="s">            VALUES</span>
+<span class="s">            (&#39;Turkey&#39;),</span>
+<span class="s">            (&#39;Italy&#39;)</span>
+<span class="s">            &quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO competitor (name, surname, role, team_id)</span>
+<span class="s">            VALUES</span>
+<span class="s">            (&#39;Ahmet&#39;, &#39;KARPUZSEVER&#39;, &#39;Photographer&#39;, 1),</span>
+<span class="s">            (&#39;Orhan&#39;, &#39;AYTUR&#39;, &#39;Captain&#39;, 1),</span>
+<span class="s">            (&#39;Melek&#39;, &#39;KOYUKANAT&#39;, &#39;Photographer&#39;, 1),</span>
+<span class="s">            (&#39;Leyla&#39;, &#39;LALECI&#39;, &#39;Assistant&#39;, 1),</span>
+<span class="s">            (&#39;Ivo&#39;, &#39;MONALDO&#39;, &#39;Photographer&#39;, 2),</span>
+<span class="s">            (&#39;Rosita&#39;, &#39;BUCCHO&#39;, &#39;Assistant&#39;, 2),</span>
+<span class="s">            (&#39;Callan&#39;, &#39;ROBERTSON&#39;, &#39;Assistant&#39;, 2),</span>
+<span class="s">            (&#39;Katarina&#39;, &#39;LONCAR&#39;, &#39;Captain&#39;, 2),</span>
+<span class="s">            (&#39;Fastred&#39;, &#39;RUMBLE&#39;, &#39;Photographer&#39;, 2)</span>
+<span class="s">            &quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method drops the team and competitor tables, creates them again and fills them with default data.</p>
+</div>
+</div>
+<div class="section" id="users-class">
+<h2>Users Class<a class="headerlink" href="#users-class" title="Permalink to this headline">¶</a></h2>
+<p>This class has all the methods that are needed for managing the users table.</p>
+<div class="section" id="id1">
+<h3>init Method<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsn</span><span class="p">):</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">dsn</span> <span class="o">=</span> <span class="n">dsn</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS users(</span>
+<span class="s">                  id serial PRIMARY KEY,</span>
+<span class="s">                  username text UNIQUE NOT NULL,</span>
+<span class="s">                  password text NOT NULL,</span>
+<span class="s">                  type text NOT NULL)&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO users (username, password, type)</span>
+<span class="s">                  SELECT &#39;admin&#39;, &#39;3333&#39;, &#39;Admin&#39;</span>
+<span class="s">                  WHERE</span>
+<span class="s">                  NOT EXISTS (</span>
+<span class="s">                      SELECT username FROM users WHERE username = &#39;admin&#39;</span>
+<span class="s">                  )&quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+      <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+  <span class="k">return</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The init method saves the dsn in a field and attempts to create the users table if it does not exists. Then it tries to insert an admin account into it if one does not exist.</p>
+</div>
+<div class="section" id="delete-user-method">
+<h3>delete_user Method<a class="headerlink" href="#delete-user-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DELETE FROM users WHERE id = </span><span class="si">%s</span><span class="s">&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is a self explanatory method that deletes a row from the users table by an id.</p>
+</div>
+<div class="section" id="update-user-method">
+<h3>update_user Method<a class="headerlink" href="#update-user-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;UPDATE users</span>
+<span class="s">            SET username=</span><span class="si">%s</span><span class="s">,password=</span><span class="si">%s</span><span class="s">,type=</span><span class="si">%s</span><span class="s"></span>
+<span class="s">            WHERE id = </span><span class="si">%s</span><span class="s">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is a self explanatory method that updates a row in the users table with the given data.</p>
+</div>
+<div class="section" id="add-user-method">
+<h3>add_user Method<a class="headerlink" href="#add-user-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT username FROM users</span>
+<span class="s">            WHERE username = </span><span class="si">%s</span><span class="s">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">username</span><span class="p">,))</span>
+<span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">():</span>
+    <span class="k">return</span> <span class="bp">False</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO users (username, password, type)</span>
+<span class="s">            VALUES (</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;&quot;&quot;</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the method that adds rows into the users table. However, first it checks if there is a row with that username and if there is, it returns false because the username must be unique. If there is no match, the user is added. This is a lower level method that is called through higher level methods.</p>
+</div>
+<div class="section" id="add-user-from-table-method">
+<h3>add_user_from_table Method<a class="headerlink" href="#add-user-from-table-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">add_user_from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+      <span class="n">flash</span><span class="p">(</span><span class="s">&quot;User added!&quot;</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">))</span>
+  <span class="k">else</span><span class="p">:</span>
+      <span class="n">flash</span><span class="p">(</span><span class="s">&quot;There is already a user with that name! Use a different name&quot;</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method is used to try and add a user from the users page by an admin. It calls the add_user method explained above.</p>
+</div>
+<div class="section" id="sign-up-method">
+<h3>sign_up Method<a class="headerlink" href="#sign-up-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="s">&#39;User&#39;</span><span class="p">):</span>
+    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Sign up successful! You can login as &quot;</span><span class="o">+</span> <span class="n">username</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;login&#39;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;There is already a user with that name! Use a different name&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;sign_up&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method is used to try and add a user from the sign up page. It calls the add_user method.</p>
+</div>
+<div class="section" id="login-method">
+<h3>login Method<a class="headerlink" href="#login-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT id,type FROM users</span>
+<span class="s">                  WHERE username = </span><span class="si">%s</span><span class="s"> and password = </span><span class="si">%s</span><span class="s"></span>
+<span class="s">                  &quot;&quot;&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+      <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+      <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">username</span>
+      <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Login successful!&quot;</span><span class="p">)</span>
+      <span class="k">if</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;Admin&#39;</span><span class="p">):</span>
+          <span class="n">session</span><span class="p">[</span><span class="s">&#39;admin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+          <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You are an admin! You can modify users.&quot;</span><span class="p">)</span>
+          <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">))</span>
+      <span class="k">else</span><span class="p">:</span>
+          <span class="n">session</span><span class="p">[</span><span class="s">&#39;admin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+          <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;home&#39;</span><span class="p">))</span>
+  <span class="k">else</span><span class="p">:</span>
+      <span class="n">flash</span><span class="p">(</span><span class="s">&quot;User name or password is wrong!&quot;</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;login&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method handles the logging in functionality. It executes a select statement and checks if anything returned. If so, it assigns the username to the &#8216;username&#8217; key of the session and checks if the user type is admin. If it is, then the &#8216;admin&#8217; key of the session is assigned true. These are the values that are used to determine which user can do/see what.</p>
+<p>If nothing is returned from the select, a flash message is shown to the user.</p>
+</div>
+<div class="section" id="show-users-method">
+<h3>show_users Method<a class="headerlink" href="#show-users-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">show_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">dbapi2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsn</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+      <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+      <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT id, username, password, type FROM users&quot;</span>
+      <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">users</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;user/users.html&#39;</span><span class="p">,</span> <span class="n">users</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is simply the method that is called when an admin wants to open the users page. All users are selected and sorted according to their usernames.</p>
+</div>
+<div class="section" id="id2">
+<h3>reset_table Method<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;DROP TABLE IF EXISTS users&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;CREATE TABLE users(</span>
+<span class="s">            id serial PRIMARY KEY,</span>
+<span class="s">            username text UNIQUE NOT NULL,</span>
+<span class="s">            password text NOT NULL,</span>
+<span class="s">            type text NOT NULL)&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO users (username, password, type)</span>
+<span class="s">            VALUES (&#39;admin&#39;, &#39;3333&#39;, &#39;Admin&#39;)&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method drops the users table and creates it again. Then it adds the default admin user to the table.</p>
+</div>
+</div>
+<div class="section" id="methods-in-server-py">
+<h2>Methods in server.py<a class="headerlink" href="#methods-in-server-py" title="Permalink to this headline">¶</a></h2>
+<p>server.py is the main part of our application. It is the file where the methods that flask calls when it gets a request, are in. These methods create instances of a class and call its methods according to the type of the request.</p>
+<div class="section" id="uwp-comp-method">
+<h3>uwp_comp Method<a class="headerlink" href="#uwp-comp-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/underwater_photography/competitors&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">uwp_comp</span><span class="p">():</span>
+    <span class="n">dsn</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">UWP</span><span class="p">(</span><span class="n">dsn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_comp</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Add&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Name&#39;</span><span class="p">]</span>
+        <span class="n">surname</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Surname&#39;</span><span class="p">]</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Country&#39;</span><span class="p">]</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Role&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">surname</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">add_competitor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surname</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="n">role</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter a name and a surname!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_comp</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Delete&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">delete_competitor</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the competitor you want to delete using the radio buttons!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_comp</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="s">&#39;Update&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Name&#39;</span><span class="p">]</span>
+        <span class="n">surname</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Surname&#39;</span><span class="p">]</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Country&#39;</span><span class="p">]</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Role&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">surname</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">update_competitor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surname</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the competitor you want to update using the radio buttons!&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">surname</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter a name and a surname!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_comp</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Reset&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">reset_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method handles the competitor page requests. If the HTTP method is GET, it calls show_page_comp(). If it is POST, then it determines the kind (add/update/delete/reset), gets the required inputs from the form fields and does some input checking before calling the appropriate function. In add, it checks if the name and surname boxes are not empty, in delete it checks if any one of the rows is selected and in update it checks both of those conditions.</p>
+</div>
+<div class="section" id="uwp-team-method">
+<h3>uwp_team Method<a class="headerlink" href="#uwp-team-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/underwater_photography/teams&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">uwp_team</span><span class="p">():</span>
+    <span class="n">dsn</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">UWP</span><span class="p">(</span><span class="n">dsn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_team</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Add&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Country&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">country</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">add_team</span><span class="p">(</span><span class="n">country</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter a country name!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_team</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Delete&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">delete_team</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the team you want to delete using the radio buttons!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_team</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s">&#39;Update&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Country&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">country</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">update_team</span><span class="p">(</span><span class="n">country</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the team you want to update using the radio buttons!&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">country</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter a country name!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_page_team</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method handles the team page requests. It works almost identically to the uwp_comp method, so check it out for any explanations.</p>
+</div>
+<div class="section" id="users-method">
+<h3>users method<a class="headerlink" href="#users-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+    <span class="n">dsn</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span><span class="n">dsn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">session</span><span class="p">[</span><span class="s">&#39;admin&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_users</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s">&#39;Add&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;UserName&#39;</span><span class="p">]</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Password&#39;</span><span class="p">]</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;UserType&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">add_user_from_table</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter all the fields&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_users</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s">&#39;Delete&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">delete_user</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the user you want to delete using the radio buttons!&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_users</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s">&#39;Update&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;select&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;UserName&#39;</span><span class="p">]</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;Password&#39;</span><span class="p">]</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;UserType&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span> <span class="ow">and</span> <span class="nb">type</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">id</span><span class="p">:</span>
+                    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to select the user you want to update using the radio buttons!&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">password</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">:</span>
+                    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You need to enter all the fields&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">show_users</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s">&#39;Reset&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">reset_table</span><span class="p">()</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Only admins can access that page!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;home&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method handles the users page requests. First thing it does is check if the user is an admin. If it is, then the method works similarly to the uwp_comp method. Otherwise, the user is redirected to the home_page.</p>
+</div>
+<div class="section" id="logout-method">
+<h3>logout Method<a class="headerlink" href="#logout-method" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/logout&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">logout</span><span class="p">():</span>
+    <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Logged out!&quot;</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;admin&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;home&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method simply logs the user out.</p>
+</div>
+<div class="section" id="id3">
+<h3>login Method<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/login&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">login</span><span class="p">():</span>
+    <span class="n">dsn</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span><span class="n">dsn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;user/login.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the method that handles the login page requests. If the request is GET, it justs renders the html template. Otherwise it is a POST, so it gets the username and password and calls the login method of Users class.</p>
+</div>
+<div class="section" id="id4">
+<h3>sign_up Method<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/signup&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">sign_up</span><span class="p">():</span>
+    <span class="n">dsn</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;dsn&#39;</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span><span class="n">dsn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;user/signup.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">page</span><span class="o">.</span><span class="n">sign_up</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;You must enter a username and a password!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;user/signup.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the method that handles the sign up page requests. It is similar to the login method but it checks if the username or password boxes are empty before calling the sign_up method of Users.</p>
+</div>
+</div>
+<div class="section" id="html-templates">
+<h2>HTML Templates<a class="headerlink" href="#html-templates" title="Permalink to this headline">¶</a></h2>
+<p>These are the files that are rendered to create what the user sees in their browser. They are templates because they have parameters which we can fill up in run time.</p>
+<div class="section" id="uwp-comp-html">
+<h3>uwp_comp.html<a class="headerlink" href="#uwp-comp-html" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre>{% block body %}
+<span class="nt">&lt;h1&gt;</span> Competitor List <span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&#39;uwp_comp&#39;) }}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;table&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;th&gt;</span> <span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Surname<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Country<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Role<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      {% for id, name, surname, country, role in competitors %}
+         <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;select&quot;</span><span class="na">value=</span><span class="s">&quot;{{id}}&quot;</span> <span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{name}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{surname}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{country}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{role}} <span class="nt">&lt;/td&gt;</span>
+          <span class="nt">&lt;/tr&gt;</span>
+      {% endfor %}
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;Name&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Name&quot;</span> <span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;Surname&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Surname&quot;</span><span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;Country&quot;</span><span class="nt">&gt;</span>
+            {% for country in countries %}
+              <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;{{country}}&quot;</span><span class="nt">&gt;</span>{{country}}<span class="nt">&lt;/option&gt;</span>
+            {% endfor %}
+            <span class="nt">&lt;/select&gt;</span>
+         <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;Role&quot;</span><span class="nt">&gt;</span>
+             {% for role in roles %}
+              <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;{{role}}&quot;</span><span class="nt">&gt;</span>{{role}}<span class="nt">&lt;/option&gt;</span>
+            {% endfor %}
+            <span class="nt">&lt;/select&gt;</span>
+         <span class="nt">&lt;/td&gt;</span>
+       <span class="nt">&lt;/tr&gt;</span>
+   <span class="nt">&lt;/table&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Add&quot;</span><span class="na">value=</span><span class="s">&quot;Add&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Delete&quot;</span><span class="na">value=</span><span class="s">&quot;Delete&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Update&quot;</span><span class="na">value=</span><span class="s">&quot;Update&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Reset&quot;</span><span class="na">value=</span><span class="s">&quot;Reset Table&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+
+<span class="nt">&lt;footer&gt;</span>Ercan Alp Serteli<span class="nt">&lt;/footer&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the main body of the template for the underwater photography competitors page. There is a table that is filled with the values from <em>competitors</em>. Also the values of country and role selections are taken from parameters. Name and surname data is taken using text boxes and add, update, delete, reset table operations are determined by checking which submit has been pressed.</p>
+</div>
+<div class="section" id="uwp-teams-html">
+<h3>uwp_teams.html<a class="headerlink" href="#uwp-teams-html" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre>{% block body %}
+<span class="nt">&lt;h1&gt;</span> Team List <span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&#39;uwp_team&#39;) }}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;table&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;th&gt;</span> <span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Country<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Number of members<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      {% for id, country, num_mem in teams %}
+         <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;select&quot;</span><span class="na">value=</span><span class="s">&quot;{{id}}&quot;</span> <span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{country}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{num_mem}} <span class="nt">&lt;/td&gt;</span>
+          <span class="nt">&lt;/tr&gt;</span>
+      {% endfor %}
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;Country&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Country&quot;</span><span class="nt">/&gt;</span>   <span class="nt">&lt;/td&gt;</span>
+       <span class="nt">&lt;/tr&gt;</span>
+   <span class="nt">&lt;/table&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Add&quot;</span><span class="na">value=</span><span class="s">&quot;Add&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Delete&quot;</span><span class="na">value=</span><span class="s">&quot;Delete&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Update&quot;</span><span class="na">value=</span><span class="s">&quot;Update&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+
+<span class="nt">&lt;footer&gt;</span>Ercan Alp Serteli<span class="nt">&lt;/footer&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the template for the underwater photography teams page. It works very similarly to the uwp_comp page</p>
+</div>
+<div class="section" id="login-html">
+<h3>login.html<a class="headerlink" href="#login-html" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Login<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;p&gt;</span> To login as an example admin account: User name = admin, Password = 3333 <span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;jumbotron&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-login&quot;</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&#39;login&#39;) }}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;username&quot;</span> <span class="na">class=</span><span class="s">&quot;sr-only&quot;</span><span class="nt">&gt;</span>Username<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;username&quot;</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">id=</span><span class="s">&quot;username&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;User Name&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;sr-only&quot;</span><span class="nt">&gt;</span>Password<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">id=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Password&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Login&quot;</span> <span class="na">value=</span><span class="s">&quot;Login&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the template for the login page. Bootstrap classes are used for styling. A simple form with two text boxes and a submit button.</p>
+</div>
+<div class="section" id="signup-html">
+<h3>signup.html<a class="headerlink" href="#signup-html" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Sign Up<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;jumbotron&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-signup&quot;</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&#39;sign_up&#39;) }}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;username&quot;</span> <span class="na">class=</span><span class="s">&quot;sr-only&quot;</span><span class="nt">&gt;</span>Username<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;username&quot;</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">id=</span><span class="s">&quot;username&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;User Name&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;sr-only&quot;</span><span class="nt">&gt;</span>Password<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">id=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Password&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;SignUp&quot;</span> <span class="na">value=</span><span class="s">&quot;Sign Up&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the template for the signup page. Almost identical to the login page.</p>
+</div>
+<div class="section" id="users-html">
+<h3>users.html<a class="headerlink" href="#users-html" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span> User List <span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&#39;users&#39;) }}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;table&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;th&gt;</span> <span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>User Name<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Password<span class="nt">&lt;/th&gt;</span>
+         <span class="nt">&lt;th&gt;</span>Type<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      {% for id, username, password, type in users %}
+         <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;select&quot;</span><span class="na">value=</span><span class="s">&quot;{{id}}&quot;</span> <span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{username}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{password}} <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span> {{type}} <span class="nt">&lt;/td&gt;</span>
+          <span class="nt">&lt;/tr&gt;</span>
+      {% endfor %}
+      <span class="nt">&lt;tr&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;/td&gt;</span>
+
+         <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;UserName&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;User Name&quot;</span> <span class="nt">/&gt;&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;Password&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Password&quot;</span><span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+         <span class="nt">&lt;td&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;UserType&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;User Type&quot;</span><span class="nt">/&gt;</span> <span class="nt">&lt;/td&gt;</span>
+       <span class="nt">&lt;/tr&gt;</span>
+   <span class="nt">&lt;/table&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Add&quot;</span><span class="na">value=</span><span class="s">&quot;Add&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Delete&quot;</span><span class="na">value=</span><span class="s">&quot;Delete&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Update&quot;</span><span class="na">value=</span><span class="s">&quot;Update&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;Reset&quot;</span><span class="na">value=</span><span class="s">&quot;Reset Table&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the template for the users page. This is the template for the underwater photography teams page. It works very similarly to the uwp_comp and uwp_team pages</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parts Implemented by Ercan Alp Serteli</a><ul>
+<li><a class="reference internal" href="#uwp-class">UWP Class</a><ul>
+<li><a class="reference internal" href="#init-method">init Method</a></li>
+<li><a class="reference internal" href="#show-page-comp-method">show_page_comp Method</a></li>
+<li><a class="reference internal" href="#show-page-team-method">show_page_team Method</a></li>
+<li><a class="reference internal" href="#add-competitor-method">add_competitor Method</a></li>
+<li><a class="reference internal" href="#delete-competitor-method">delete_competitor Method</a></li>
+<li><a class="reference internal" href="#update-competitor-method">update_competitor Method</a></li>
+<li><a class="reference internal" href="#add-team-method">add_team Method</a></li>
+<li><a class="reference internal" href="#update-team-method">update_team Method</a></li>
+<li><a class="reference internal" href="#delete-team-method">delete_team Method</a></li>
+<li><a class="reference internal" href="#reset-table-method">reset_table Method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#users-class">Users Class</a><ul>
+<li><a class="reference internal" href="#id1">init Method</a></li>
+<li><a class="reference internal" href="#delete-user-method">delete_user Method</a></li>
+<li><a class="reference internal" href="#update-user-method">update_user Method</a></li>
+<li><a class="reference internal" href="#add-user-method">add_user Method</a></li>
+<li><a class="reference internal" href="#add-user-from-table-method">add_user_from_table Method</a></li>
+<li><a class="reference internal" href="#sign-up-method">sign_up Method</a></li>
+<li><a class="reference internal" href="#login-method">login Method</a></li>
+<li><a class="reference internal" href="#show-users-method">show_users Method</a></li>
+<li><a class="reference internal" href="#id2">reset_table Method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#methods-in-server-py">Methods in server.py</a><ul>
+<li><a class="reference internal" href="#uwp-comp-method">uwp_comp Method</a></li>
+<li><a class="reference internal" href="#uwp-team-method">uwp_team Method</a></li>
+<li><a class="reference internal" href="#users-method">users method</a></li>
+<li><a class="reference internal" href="#logout-method">logout Method</a></li>
+<li><a class="reference internal" href="#id3">login Method</a></li>
+<li><a class="reference internal" href="#id4">sign_up Method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#html-templates">HTML Templates</a><ul>
+<li><a class="reference internal" href="#uwp-comp-html">uwp_comp.html</a></li>
+<li><a class="reference internal" href="#uwp-teams-html">uwp_teams.html</a></li>
+<li><a class="reference internal" href="#login-html">login.html</a></li>
+<li><a class="reference internal" href="#signup-html">signup.html</a></li>
+<li><a class="reference internal" href="#users-html">users.html</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="member3.html"
+                        title="previous chapter">Parts Implemented by Member Name</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="member5.html"
+                        title="next chapter">Parts Implemented by ANIL YILDIRIM</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developer/member4.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member5.html" title="Parts Implemented by ANIL YILDIRIM"
+             >next</a></li>
+        <li class="right" >
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Developer Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Team Name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

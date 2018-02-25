@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %} - Power Boat Racing {% endblock %}
+
+{% block body %}
+<h3>Best player ever </h3>
+
+* best player
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>Id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>Total championship&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+		</tr>
+		 {% for id,name,chm in best %}
+			<tr>
+				<td></td>
+				<td> {{id}}   </td>
+				<td> {{name}}   </td>
+				<td> {{chm}}   </td>
+
+	    </tr>
+		{% endfor %}
+<table>
+
+<hr>
+
+
+<br><hr><a href="/drivers"> Return Back ! </a>
+
+{% endblock %}

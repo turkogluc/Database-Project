@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Water Sports {% block title %}{% endblock %}</title>
+
+   	<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}" />
+
+
+    <!-- Navigation -->
+</head>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ url_for('home') }}">Start</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/spear_fishing">Spearfishing</a></li>
+                    <li><a href="/drivers">Power Boat Racing</a></li>
+		    		<li><a href="/Water_Polo">WaterPolo</a></li>
+                    <li><a href="/underwater_photography">Underwater Photography</a></li>
+                    <li><a href="/diving">Diving</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container" style= "margin-top: 50px;">
+        <div class="row">
+        	<div class="col-md-10">
+				<div class="row">
+				{% block body %} {% endblock %}
+				</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+    <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Itucsdb1525</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+</body>
+</html>

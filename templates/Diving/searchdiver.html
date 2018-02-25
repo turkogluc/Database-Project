@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %} - DIVER Search Results{% endblock %}
+
+{% block body %}
+<form action="{{ url_for('diving') }}" method="post">
+	<table>
+	<input class="updateButton" type="submit" name="return"value="Return to Main Page of Diving" />
+</form>
+
+<br><br>
+
+<h2> DIVER Search Results </h2>
+<form action="{{ url_for('diving') }}" method="post">
+	<table class="table table-bordered">
+		<tr class="success">
+			<th> </th>
+			<th>DiverID</th>
+			<th>Name</th>
+			<th>Age</th>
+			<th>Country</th>
+		</tr>
+		{% for diverID, name, age, country in divers %}
+			<tr class="active">
+				<td> <input type="radio" name="select"value="{{diverID}}" /> </td>
+				<td> {{diverID}} </td>
+				<td> {{name}} </td>
+				<td> {{age}} </td>
+				<td> {{country}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="id" value="" />    </td>
+			<td> <input type="text" name="name" value="" />  </td>
+			<td> <input type="text" name="age" value="" />   </td>
+			<td> <input type="text" name="country" value="" /></td>
+	    </tr>
+	</table>
+	<input class="addButton" type="submit" name="add1" value = "Add" />
+	<input class="deleteButton" type="submit" name="delete1"value="Delete" />
+	<input class="updateButton" type="submit" name="update1"value="Update" />
+	<input class="findButton" type="submit" name="find1"  value="Find"   />
+</form>
+{% endblock %}

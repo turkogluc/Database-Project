@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %} - Power Boat Racing {% endblock %}
+
+{% block body %}
+
+<form action="{{ url_for('oper2powerboat') }}" method="post">
+
+	<br><input type="submit" name="Join1" value="Join1" /> Join1
+	<br><input type="submit" name="Join2" value="Join2" />Bos1
+	<br><input type="submit" name="op3" value="op3" />bos2
+	<br><input type="submit" name="op4" value="op4" />bos3
+	<br><input type="submit" name="op5" value="op5">
+</form>
+
+
+{% endblock %}

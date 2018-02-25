@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parts Implemented by Ercan Alp Serteli &mdash; itucsdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="itucsdb 1.0 documentation" href="../index.html" />
+    <link rel="up" title="User Guide" href="index.html" />
+    <link rel="next" title="Parts Implemented by Turker Unlu" href="member5.html" />
+    <link rel="prev" title="Parts Implemented by Member Name" href="member3.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member5.html" title="Parts Implemented by Turker Unlu"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parts-implemented-by-ercan-alp-serteli">
+<h1>Parts Implemented by Ercan Alp Serteli<a class="headerlink" href="#parts-implemented-by-ercan-alp-serteli" title="Permalink to this headline">¶</a></h1>
+<p>The parts that I have implemented are the <em>Underwater Photography</em> pages and functionalities related to users.</p>
+<div class="section" id="underwater-photography">
+<h2>Underwater Photography<a class="headerlink" href="#underwater-photography" title="Permalink to this headline">¶</a></h2>
+<p>The underwater photography pages can be reached by clicking this button in the home page.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/visit_button.PNG"><img alt="Visit Underwater Photography Button" src="../_images/visit_button.PNG" style="width: 1080.0px; height: 219.2px;" /></a>
+</div></blockquote>
+<p>Or from this menu item in the navigation bar from any other page.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/navbar_button.PNG"><img alt="Underwater Photography navigation bar item" src="../_images/navbar_button.PNG" style="width: 354.0px; height: 53.0px;" /></a>
+</div></blockquote>
+<p>Now that you clicked one of them, you are in the <em>Competitors</em> page of Underwater Photography.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/competitor_page.PNG"><img alt="Underwater Photography competitors page" src="../_images/competitor_page.PNG" style="width: 808.0px; height: 486.0px;" /></a>
+</div></blockquote>
+<p>From the <em>Categories</em> menu you see on the left, it is possible to navigate between the two pages of Underwater Photography: <em>Competitors</em> and <em>Teams</em></p>
+<p>What you see in the middle is a representation of the underlying Competitors database table. It lists the information of the existing competitors in the table and allows anyone to modify the table via adding, updating or deleting entries or via resetting the table to its default state.</p>
+<p>The entries are sorted according to the alphabetical order of their first names.</p>
+<div class="section" id="adding">
+<h3>Adding<a class="headerlink" href="#adding" title="Permalink to this headline">¶</a></h3>
+<p>To add a new competitor, you need to enter a name and a surname using the textboxes. Then you need to select a country and a role using the dropdown menus and click the <em>Add</em> button.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/add.PNG"><img alt="Adding demonstration" src="../_images/add.PNG" style="width: 510.0px; height: 58.0px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To add a competitor from a team of some non-existing country, you first need to add the team from the <em>Teams</em> page. On the other hand, the team roles are fixed. They cannot be changed and a new role cannot be added.</p>
+</div>
+</div></blockquote>
+<p>As a result, the new competitor you entered will be added to the database and the new list will be shown to you.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/add_newlist.PNG"><img alt="New list after the adding operation" src="../_images/add_newlist.PNG" style="width: 527.0px; height: 369.0px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you leave the name or the surname boxes empty, it will not be added and the page will show you a warning message</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="deleting">
+<h3>Deleting<a class="headerlink" href="#deleting" title="Permalink to this headline">¶</a></h3>
+<p>To delete a competitor, click the circle to its left in the list. Then press the <em>Delete</em> button.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/delete.PNG"><img alt="Deleting demonstration" src="../_images/delete.PNG" style="width: 518.0px; height: 176.0px;" /></a>
+</div></blockquote>
+<p>Then, the entry will be removed from the database and the resulting list will be displayed.</p>
+</div>
+<div class="section" id="updating">
+<h3>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h3>
+<p>To update the information of a competitor, select the comptitor in the same manner as deleting (by clicking the circle to its left) and then enter the information as you would in adding. After that, click the <em>Update</em> button and watch it happen.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/update.PNG"><img alt="Updating demonstration" src="../_images/update.PNG" style="width: 515.0px; height: 277.0px;" /></a>
+</div></blockquote>
+<p>Information in the entry will be updated and shown back.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/update_newlist.PNG"><img alt="New list after the updating operation" src="../_images/update_newlist.PNG" style="width: 509.0px; height: 217.0px;" /></a>
+</div></blockquote>
+</div>
+<div class="section" id="resetting-the-table">
+<h3>Resetting the Table<a class="headerlink" href="#resetting-the-table" title="Permalink to this headline">¶</a></h3>
+<p>Clicking the <em>Reset Table</em> button reverts any changes done to both the competitors and the teams table and fills them with default values. Not much has to be said about this function.</p>
+</div>
+<div class="section" id="teams-page">
+<h3>Teams Page<a class="headerlink" href="#teams-page" title="Permalink to this headline">¶</a></h3>
+<p>When you click the <em>Teams</em> button in the left menu, you will end up in this page.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/teams.PNG"><img alt="The teams page" src="../_images/teams.PNG" style="width: 601.0px; height: 307.0px;" /></a>
+</div></blockquote>
+<p>What you see is the same structure as the Competitors page, but with a smaller table. That is the teams list. Teams only have a <em>Country</em> field and an ID, since competitions are held with national teams. In fact, the competitors list you have seen before is taking its country information from this table.</p>
+<p>All the operations as in the Competitors page are possible here as well, and they all work the same.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you try to delete a team that has members in the competitors list, you cannot do it. To do this, delete the members from the Competitors page first.</p>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="user-operations">
+<h2>User Operations<a class="headerlink" href="#user-operations" title="Permalink to this headline">¶</a></h2>
+<p>The website supports basic user functionalities such as signing up, logging in, logging out. Modifying the information of users is also possible for admin type accounts.</p>
+<div class="section" id="signing-up">
+<h3>Signing up<a class="headerlink" href="#signing-up" title="Permalink to this headline">¶</a></h3>
+<p>You can move to the sign up page by clicking the <em>Sign Up</em> button from the navigation bar.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/sign_up_button.PNG"><img alt="The sign up button" src="../_images/sign_up_button.PNG" style="width: 710.4px; height: 41.6px;" /></a>
+</div></blockquote>
+<p>In the sign up page, enter a username and a password and press the <em>Sign Up</em> button. This will enable you to login using those credentials. You will be redirected to the Login page, since you will probably want to login after signing up.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/sign_up_page.PNG"><img alt="The sign up page" src="../_images/sign_up_page.PNG" style="width: 891.0px; height: 271.0px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you try to sign up with a blank username or password, the page will warn you. Also a different warning message will be shown if you enter an username that already exists in the system.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not use a real password to sign up because it is not secure, at all. Literally anyone can see your information if they want to.</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="logging-in">
+<h3>Logging in<a class="headerlink" href="#logging-in" title="Permalink to this headline">¶</a></h3>
+<p>You can get to the login page by clicking the <em>Login</em> button from the navigation bar.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/login_button.PNG"><img alt="The login button" src="../_images/login_button.PNG" style="width: 710.4px; height: 41.6px;" /></a>
+</div></blockquote>
+<p>You can also get redirected here by signing up.</p>
+<p>You will be given a default admin account&#8217;s credentials in case you want to try out being an admin. You can login using that or your own credentials.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any user who signs up is a <em>User</em> type user. To change a user&#8217;s type, you have to be logged in as an <em>Admin</em> type user.</p>
+</div>
+<a class="reference internal image-reference" href="../_images/login_page.PNG"><img alt="The login page" src="../_images/login_page.PNG" style="width: 902.0px; height: 355.0px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you try to login using wrong information, the page will show you a message and let you try again.</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="logging-out">
+<h3>Logging out<a class="headerlink" href="#logging-out" title="Permalink to this headline">¶</a></h3>
+<p>Once you are logged in, a new item appears in the navigation bar while the sign up and login items disappear. This new button lets you log out from the system.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/logout_button.PNG"><img alt="The log out button" src="../_images/logout_button.PNG" style="width: 698.4px; height: 39.2px;" /></a>
+</div></blockquote>
+<p>Once you click it, you will no longer be logged in.</p>
+</div>
+<div class="section" id="users-page">
+<h3>Users Page<a class="headerlink" href="#users-page" title="Permalink to this headline">¶</a></h3>
+<p>If you login as an admin, you will be directed to the <em>Users</em> page. You can also go there using the navigation bar item that only shows up if you are an admin.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/users_button.PNG"><img alt="The button to get to the users page" src="../_images/users_button.PNG" style="width: 806.4px; height: 35.2px;" /></a>
+</div></blockquote>
+<p>In the users page, you will see the list of users. You can add, delete or update users or you can reset the users table. The operations are identical to the ones in the Underwater Photography pages.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/users_page.PNG"><img alt="The button to get to the users page" src="../_images/users_page.PNG" style="width: 398.4px; height: 235.2px;" /></a>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parts Implemented by Ercan Alp Serteli</a><ul>
+<li><a class="reference internal" href="#underwater-photography">Underwater Photography</a><ul>
+<li><a class="reference internal" href="#adding">Adding</a></li>
+<li><a class="reference internal" href="#deleting">Deleting</a></li>
+<li><a class="reference internal" href="#updating">Updating</a></li>
+<li><a class="reference internal" href="#resetting-the-table">Resetting the Table</a></li>
+<li><a class="reference internal" href="#teams-page">Teams Page</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#user-operations">User Operations</a><ul>
+<li><a class="reference internal" href="#signing-up">Signing up</a></li>
+<li><a class="reference internal" href="#logging-in">Logging in</a></li>
+<li><a class="reference internal" href="#logging-out">Logging out</a></li>
+<li><a class="reference internal" href="#users-page">Users Page</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="member3.html"
+                        title="previous chapter">Parts Implemented by Member Name</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="member5.html"
+                        title="next chapter">Parts Implemented by Turker Unlu</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/member4.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member5.html" title="Parts Implemented by Turker Unlu"
+             >next</a></li>
+        <li class="right" >
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >User Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Team Name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

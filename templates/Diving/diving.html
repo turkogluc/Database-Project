@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %} - Diving {% endblock %}
+
+{% block body %}
+
+<form action="{{ url_for('diving') }}" method="post">
+	<table>
+	<input class="addButton" type="submit" name="recreate"value="Recreate All Tables" />
+</form>
+
+<br><br>
+
+<h2> List of Divers </h2>
+<form action="{{ url_for('diving') }}" method="post">
+	<table class="table table-bordered">
+		<tr class="success">
+			<th> </th>
+			<th>DiverID</th>
+			<th>Name</th>
+			<th>Age</th>
+			<th>Country</th>
+		</tr>
+		{% for diverID, name, age, country in divers %}
+			<tr class="active">
+				<td> <input type="radio" name="select"value="{{diverID}}" /> </td>
+				<td> {{diverID}} </td>
+				<td> {{name}} </td>
+				<td> {{age}} </td>
+				<td> {{country}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="id" value="" />    </td>
+			<td> <input type="text" name="name" value="" />  </td>
+			<td> <input type="text" name="age" value="" />   </td>
+			<td> <input type="text" name="country" value="" /></td>
+	    </tr>
+	</table>
+	<input class="addButton" type="submit" name="add1" value = "Add"/>
+	<input class="deleteButton" type="submit" name="delete1"value="Delete" />
+	<input class="updateButton" type="submit" name="update1"value="Update" />
+	<input class="findButton" type="submit" name="find1"  value="Find"   />
+</form>
+
+<br><br><br><br><br><br>
+
+<h2> List of Competitions </h2>
+<form action="{{ url_for('diving') }}" method="post">
+	<table class="table table-bordered">
+		<tr class="success">
+			<th> </th>
+			<th>CompetitionID</th>
+			<th>WinnerID</th>
+			<th>Year</th>
+		</tr>
+		{% for competitionID, winnerID, year in competitions %}
+			<tr class="active">
+				<td> <input type="radio" name="select"value="{{competitionID}}" /> </td>
+				<td> {{competitionID}} </td>
+				<td> {{winnerID}} </td>
+				<td> {{year}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="competitionID" value="" />    </td>
+			<td> <input type="text" name="winnerID" value="" />  </td>
+			<td> <input type="text" name="year" value="" />   </td>
+	    </tr>
+	</table>
+	<input class="addButton" type="submit" name="add2" value = "Add" />
+	<input class="deleteButton" type="submit" name="delete2" value="Delete" />
+	<input class="updateButton" type="submit" name="update2" value="Update" />
+	<input class="findButton" type="submit" name="find2"  value="Find"   />
+</form>
+
+<br><br><br><br><br><br>
+
+<h1> List of Records </h1>
+<form action="{{ url_for('diving') }}" method="post">
+	<table class="table table-bordered">
+		<tr class="success">
+			<th> </th>
+			<th>CompetitionID</th>
+			<th>DiverID</th>
+			<th>Record</th>
+		</tr>
+		{% for competitionID, diverID, record in records %}
+			<tr class="active">
+				<td> <input type="radio" name="select"value="{{competitionID ~ '-' ~ diverID}}" /> </td>
+				<td> {{competitionID}} </td>
+				<td> {{diverID}} </td>
+				<td> {{record}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="competitionID" value="" />    </td>
+			<td> <input type="text" name="diverID" value="" />  </td>
+			<td> <input type="text" name="record" value="" /></td>
+	    </tr>
+	</table>
+	<input class="addButton" type="submit" name="add3" value = "Add" />
+	<input class="deleteButton" type="submit" name="delete3" value="Delete" />
+	<input class="updateButton" type="submit" name="update3" value="Update" />
+	<input class="findButton" type="submit" name="find3" value="Find"   />
+</form>
+
+{% endblock %}

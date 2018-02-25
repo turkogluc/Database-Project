@@ -1,0 +1,48 @@
+{% extends "WaterPolo/WaterPolo_Layout.html" %}
+
+{% block title %} - Update Water Polo Player{% endblock %}
+
+{% block body %}
+<h1> Update Wounded </h1>
+
+
+
+
+<form action="{{ url_for('Water_Polo') }}" method="post">
+		<table class="table table-bordered">
+			<thead>
+
+		<tr class = "danger">
+			<th> </th>
+			<th>Name</th>
+			<th>Surname</th>
+			<th>Injury Type</th>
+			<th>Team ID</th>
+			<th>Team Name</th>
+		</thead>
+	<tbody>
+		</tr>
+		{% for w_id,w_name,w_surname,injury_type,team_id,team_name in wounded%}
+			<tr class = "info">
+				<td><input type="radio" name="select"value="{{w_id}}" /></td>
+				<td> {{w_name}} </td>
+				<td> {{w_surname}} </td>
+				<td> {{injury_type}} </td>
+				<td> {{team_id}} </td>
+				<td> {{team_name}} </td>
+
+		    </tr>
+		{% endfor %}
+	    <tr>
+			<td> </td>
+			<td> <input type="text" name="w_name" value="" /> </td>
+			<td> <input type="text" name="w_surname" value="" /> </td>
+			<td> <input type="text" name="injury_type" value="" /> </td>
+			<td> <input type="text" name="team_id" value="" /> </td>
+			<td> <input type="text" name="team_name" value="" /> </td>
+	</table>
+	 <input style = "margin:25px"  type="submit" name="Update_Wounded" value="Update Wounded" class="btn btn-danger btn-md"  />
+
+
+</form>
+{% endblock %}

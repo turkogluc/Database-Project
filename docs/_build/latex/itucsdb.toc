@@ -1,0 +1,90 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}User Guide}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Parts Implemented by Member Name}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Parts Implemented by Cemal T\IeC {\"u}rko\IeC {\u g}lu}{3}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Power Boat Racing}{3}{subsection.1.2.1}
+\contentsline {subsubsection}{Adding}{3}{subsubsection*.3}
+\contentsline {subsubsection}{Deleting}{4}{subsubsection*.4}
+\contentsline {subsubsection}{Updating}{5}{subsubsection*.5}
+\contentsline {subsubsection}{Resetting the Table}{5}{subsubsection*.6}
+\contentsline {subsubsection}{Tables}{5}{subsubsection*.7}
+\contentsline {section}{\numberline {1.3}Parts Implemented by Member Name}{8}{section.1.3}
+\contentsline {section}{\numberline {1.4}Parts Implemented by Ercan Alp Serteli}{8}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Underwater Photography}{8}{subsection.1.4.1}
+\contentsline {subsubsection}{Adding}{9}{subsubsection*.8}
+\contentsline {subsubsection}{Deleting}{10}{subsubsection*.9}
+\contentsline {subsubsection}{Updating}{10}{subsubsection*.10}
+\contentsline {subsubsection}{Resetting the Table}{11}{subsubsection*.11}
+\contentsline {subsubsection}{Teams Page}{11}{subsubsection*.12}
+\contentsline {subsection}{\numberline {1.4.2}User Operations}{12}{subsection.1.4.2}
+\contentsline {subsubsection}{Signing up}{12}{subsubsection*.13}
+\contentsline {subsubsection}{Logging in}{13}{subsubsection*.14}
+\contentsline {subsubsection}{Logging out}{13}{subsubsection*.15}
+\contentsline {subsubsection}{Users Page}{13}{subsubsection*.16}
+\contentsline {section}{\numberline {1.5}Parts Implemented by Turker Unlu}{14}{section.1.5}
+\contentsline {section}{\numberline {1.6}Divers}{14}{section.1.6}
+\contentsline {section}{\numberline {1.7}Competitions}{14}{section.1.7}
+\contentsline {section}{\numberline {1.8}Records}{15}{section.1.8}
+\contentsline {chapter}{\numberline {2}Developer Guide}{17}{chapter.2}
+\contentsline {section}{\numberline {2.1}Database Design}{17}{section.2.1}
+\contentsline {section}{\numberline {2.2}Code}{17}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Parts Implemented by Member Name}{17}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Parts Implemented by Cemal T\IeC {\"u}rko\IeC {\u g}lu}{17}{subsection.2.2.2}
+\contentsline {subsubsection}{Statistics Operations}{17}{subsubsection*.17}
+\contentsline {paragraph}{All Drivers And Their Teams}{18}{paragraph*.18}
+\contentsline {paragraph}{League ranking and boat info's}{19}{paragraph*.19}
+\contentsline {paragraph}{All person and their races history}{20}{paragraph*.20}
+\contentsline {paragraph}{Old races and related winner info's}{20}{paragraph*.21}
+\contentsline {paragraph}{All races and all peoplo info's}{21}{paragraph*.22}
+\contentsline {paragraph}{Best player of all times}{21}{paragraph*.23}
+\contentsline {paragraph}{All people who is a captain OR, have winner award in old races}{22}{paragraph*.24}
+\contentsline {paragraph}{All boats which is successful at 2015 AND also have winner award in old races}{23}{paragraph*.25}
+\contentsline {paragraph}{All people who is not a captain of any team}{24}{paragraph*.26}
+\contentsline {subsection}{\numberline {2.2.3}Parts Implemented by Member Name}{24}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Parts Implemented by Ercan Alp Serteli}{24}{subsection.2.2.4}
+\contentsline {subsubsection}{UWP Class}{24}{subsubsection*.27}
+\contentsline {paragraph}{init Method}{24}{paragraph*.28}
+\contentsline {paragraph}{show\_page\_comp Method}{25}{paragraph*.29}
+\contentsline {paragraph}{show\_page\_team Method}{26}{paragraph*.30}
+\contentsline {paragraph}{add\_competitor Method}{26}{paragraph*.31}
+\contentsline {paragraph}{delete\_competitor Method}{26}{paragraph*.32}
+\contentsline {paragraph}{update\_competitor Method}{26}{paragraph*.33}
+\contentsline {paragraph}{add\_team Method}{26}{paragraph*.34}
+\contentsline {paragraph}{update\_team Method}{27}{paragraph*.35}
+\contentsline {paragraph}{delete\_team Method}{27}{paragraph*.36}
+\contentsline {paragraph}{reset\_table Method}{27}{paragraph*.37}
+\contentsline {subsubsection}{Users Class}{28}{subsubsection*.38}
+\contentsline {paragraph}{init Method}{28}{paragraph*.39}
+\contentsline {paragraph}{delete\_user Method}{28}{paragraph*.40}
+\contentsline {paragraph}{update\_user Method}{29}{paragraph*.41}
+\contentsline {paragraph}{add\_user Method}{29}{paragraph*.42}
+\contentsline {paragraph}{add\_user\_from\_table Method}{29}{paragraph*.43}
+\contentsline {paragraph}{sign\_up Method}{29}{paragraph*.44}
+\contentsline {paragraph}{login Method}{29}{paragraph*.45}
+\contentsline {paragraph}{show\_users Method}{30}{paragraph*.46}
+\contentsline {paragraph}{reset\_table Method}{30}{paragraph*.47}
+\contentsline {subsubsection}{Methods in server.py}{31}{subsubsection*.48}
+\contentsline {paragraph}{uwp\_comp Method}{31}{paragraph*.49}
+\contentsline {paragraph}{uwp\_team Method}{31}{paragraph*.50}
+\contentsline {paragraph}{users method}{32}{paragraph*.51}
+\contentsline {paragraph}{logout Method}{33}{paragraph*.52}
+\contentsline {paragraph}{login Method}{33}{paragraph*.53}
+\contentsline {paragraph}{sign\_up Method}{33}{paragraph*.54}
+\contentsline {subsubsection}{HTML Templates}{34}{subsubsection*.55}
+\contentsline {paragraph}{uwp\_comp.html}{34}{paragraph*.56}
+\contentsline {paragraph}{uwp\_teams.html}{35}{paragraph*.57}
+\contentsline {paragraph}{login.html}{35}{paragraph*.58}
+\contentsline {paragraph}{signup.html}{35}{paragraph*.59}
+\contentsline {paragraph}{users.html}{36}{paragraph*.60}
+\contentsline {subsection}{\numberline {2.2.5}Parts Implemented by ANIL YILDIRIM}{36}{subsection.2.2.5}
+\contentsline {subsubsection}{Database Tables}{36}{subsubsection*.61}
+\contentsline {paragraph}{DIVER:}{38}{paragraph*.62}
+\contentsline {paragraph}{COMPETITION:}{38}{paragraph*.63}
+\contentsline {paragraph}{RECORD:}{38}{paragraph*.64}
+\contentsline {paragraph}{Class codes of Tables from diving.py:}{38}{paragraph*.65}
+\contentsline {paragraph}{Diving category codes from server.py file:}{39}{paragraph*.66}
+\contentsline {paragraph}{Add operation from diving.py file:}{40}{paragraph*.67}
+\contentsline {paragraph}{Update operation from diving.py file:}{40}{paragraph*.68}
+\contentsline {paragraph}{Delete operation from diving.py file:}{41}{paragraph*.69}
+\contentsline {paragraph}{Find operation from diving.py file:}{41}{paragraph*.70}
+\contentsline {paragraph}{Table creations from diving.py file:}{42}{paragraph*.71}

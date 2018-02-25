@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parts Implemented by Cemal Türkoğlu &mdash; itucsdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="itucsdb 1.0 documentation" href="../index.html" />
+    <link rel="up" title="User Guide" href="index.html" />
+    <link rel="next" title="Parts Implemented by Member Name" href="member3.html" />
+    <link rel="prev" title="Parts Implemented by Member Name" href="member1.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="member1.html" title="Parts Implemented by Member Name"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parts-implemented-by-cemal-turkoglu">
+<h1>Parts Implemented by Cemal Türkoğlu<a class="headerlink" href="#parts-implemented-by-cemal-turkoglu" title="Permalink to this headline">¶</a></h1>
+<p>The parts that I have implemented are the <em>Power Boat Racing</em> pages and functionalities related to users.</p>
+<div class="section" id="power-boat-racing">
+<h2>Power Boat Racing<a class="headerlink" href="#power-boat-racing" title="Permalink to this headline">¶</a></h2>
+<p>The power boat racing pages can be reached by clicking this button in the home page.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/visit.png"><img alt="../_images/visit.png" src="../_images/visit.png" style="width: 1079.2px; height: 249.6px;" /></a>
+</div></blockquote>
+<p>Power boat racing pages locates under /drivers route. In the main page you can see some complex statistics
+and all tables. There are 5 table: Drivers,Teams,Boats,League15,OldRaces. In table operation you can make
+add,delete,update and resetting table</p>
+<div class="section" id="adding">
+<h3>Adding<a class="headerlink" href="#adding" title="Permalink to this headline">¶</a></h3>
+<p>To add a new driver, you need to enter a name,team and boat using the textboxes.Also click the <em>Add</em> button.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/add.png"><img alt="Adding demonstration" src="../_images/add.png" style="width: 667.0px; height: 520.0px;" /></a>
+</div></blockquote>
+<p>As a result, the new driver you entered will be added to the database and the new list will be shown to you.</p>
+</div>
+<div class="section" id="deleting">
+<h3>Deleting<a class="headerlink" href="#deleting" title="Permalink to this headline">¶</a></h3>
+<p>To delete a driver, click the circle to its left in the list. Then press the <em>Delete</em> button.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/delete.png"><img alt="Deleting demonstration" src="../_images/delete.png" style="width: 649.0px; height: 438.0px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you try to break referencial integrity , it will not be allowed.</p>
+</div>
+</div></blockquote>
+<p>Then, the entry will be removed from the database and the resulting list will be displayed.</p>
+</div>
+<div class="section" id="updating">
+<h3>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h3>
+<p>To update the information of a competitor, select the comptitor in the same manner as deleting (by clicking the circle to its left) and then enter the information as you would in adding. After that, click the <em>Update</em> button and watch it happen.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/update.png"><img alt="Updating demonstration" src="../_images/update.png" style="width: 678.0px; height: 431.0px;" /></a>
+</div></blockquote>
+<p>Information in the entry will be updated and shown back.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Again breaking referencial integrity is not allowed</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="resetting-the-table">
+<h3>Resetting the Table<a class="headerlink" href="#resetting-the-table" title="Permalink to this headline">¶</a></h3>
+<p>Clicking the <em>Reset Table</em> button reverts any changes done to both the competitors and the teams table and fills them with default values. Not much has to be said about this function.</p>
+</div>
+<div class="section" id="tables">
+<h3>Tables<a class="headerlink" href="#tables" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>All tables are listed in main page.Also from the left menu one of the table can be selected to display.</dt>
+<dd><p class="first">Drivers</p>
+<a class="reference internal image-reference" href="../_images/add.png"><img alt="The driver table" src="../_images/add.png" style="width: 667.0px; height: 520.0px;" /></a>
+<p>Teams</p>
+<a class="reference internal image-reference" href="../_images/teams.png"><img alt="The teams table" src="../_images/teams.png" style="width: 449.0px; height: 219.0px;" /></a>
+<p>Boats</p>
+<a class="reference internal image-reference" href="../_images/boats.png"><img alt="The boats table" src="../_images/boats.png" style="width: 351.0px; height: 348.0px;" /></a>
+<p>League</p>
+<a class="reference internal image-reference" href="../_images/league.png"><img alt="The league table" src="../_images/league.png" style="width: 420.0px; height: 319.0px;" /></a>
+<p>OldRaces</p>
+<a class="last reference internal image-reference" href="../_images/oldraces.png"><img alt="The oldraces table" src="../_images/oldraces.png" style="width: 435.0px; height: 281.0px;" /></a>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parts Implemented by Cemal Türkoğlu</a><ul>
+<li><a class="reference internal" href="#power-boat-racing">Power Boat Racing</a><ul>
+<li><a class="reference internal" href="#adding">Adding</a></li>
+<li><a class="reference internal" href="#deleting">Deleting</a></li>
+<li><a class="reference internal" href="#updating">Updating</a></li>
+<li><a class="reference internal" href="#resetting-the-table">Resetting the Table</a></li>
+<li><a class="reference internal" href="#tables">Tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="member1.html"
+                        title="previous chapter">Parts Implemented by Member Name</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="member3.html"
+                        title="next chapter">Parts Implemented by Member Name</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/member2.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="member3.html" title="Parts Implemented by Member Name"
+             >next</a></li>
+        <li class="right" >
+          <a href="member1.html" title="Parts Implemented by Member Name"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">itucsdb 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >User Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Team Name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

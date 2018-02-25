@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+{% block title %}Power Boat Racing {% endblock %}
+{% block Category1Link %} "/drivers"{% endblock %}
+{% block Category1Name %} Drivers {% endblock %}
+{% block Category2Link %} "/teams"{% endblock %}
+{% block Category2Name %} Teams{% endblock %}
+{% block Category3Link %} "/boats"{% endblock %}
+{% block Category3Name %} Boats{% endblock %}
+{% block Category4Link %} "/league15"{% endblock %}
+{% block Category4Name %} League15{% endblock %}
+{% block Category5Link %} "/oldraces" {% endblock %}
+{% block Category5Name %} Old Races {% endblock %}
+
+{% block body %}
+
+<h6>Cemal Türkoğlu</h6>
+<h5>operations on two entities - nested selections are implemented in other operations<br>
+<a href=#go>Show Tables</a></h5>
+<br><a href="{{ url_for('table_init') }}">Clik for Table Initialization</a>
+<hr>
+<h2><b>Power Boat Racing Statistics</b></h2>
+
+<form action="{{ url_for('oper2powerboat') }}" method="post">
+	<table border="1">
+<tr><td width="300">SHOW ; All drivers and their teams</td><td>	<input type="submit" name="Join1" value="Join1" /> </td> </tr>
+<tr><td>SHOW ;  League ranking and boat info's</td><td>	<input type="submit" name="Join2" value="Join2" /> </td> </tr>
+<tr><td>SHOW ; All person and their races history</td><td>	<input type="submit" name="LJoin" value="Left-outer-Join" /> </td> </tr>
+<tr><td>SHOW ; Old races and related winner info's</td><td>	<input type="submit" name="RJoin" value="Right-outer-join" /> </td> </tr>
+<tr><td>SHOW ; All races and all peoplo info's</td><td>	<input type="submit" name="FJoin" value="Full-join"> </td> </tr>
+<tr><td>SHOW ; Best player of all times</td><td>	<input type="submit" name="Best" value="Best-Player"> </td> </tr>
+	</table>
+	<br><hr>
+
+	<table border=1>
+<tr> <td>SHOW ; All people who is a captain OR, have winner award in old races</td> <td>	<input type="submit" name="Union" value="Union" /> </td> </tr>
+<tr> <td>SHOW ; All boats which is successful at 2015 AND also have winner award in old races </td> <td>	<input type="submit" name="Intersect" value="Intersect" /> </td> </tr>
+<tr> <td>SHOW ; All people who is not a captain of any team</td> <td>	<input type="submit" name="Minus" value="Except" /> </td> </tr>
+	</table>
+</form>
+
+
+<div id=go></div>
+<hr>
+<h6>All tables are displayed below . Also table projection can be made from the left menu. From the menu , in every selection one table will be displayed .<h6><hr>
+
+
+<h1> Drivers Table </h1>
+<form action="{{ url_for('power_boat') }}" method="post">
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>name</th>
+			<th>team</th>
+			<th>boat</th>
+		</tr>
+		{% for id, name, team , boat in drivers %}
+			<tr>
+				<td> <input type="radio" name="select"value="{{id}}" /> </td>
+				<td> {{id}}   </td>
+				<td> {{name}} </td>
+				<td> {{team}} </td>
+				<td> {{boat}} </td>
+		    </tr>
+		{% endfor %}
+		<tr height='50'>
+			<td></td>
+			<td></td>
+			<td> <input type="text" name="name" value="name" /> </td>
+			<td> <input type="text" name="team" value="team" />    </td>
+			<td> <input type="text" name="boat" value="boat" /> </td>
+			<input type="hidden" name="table" value="drivers">
+	    </tr>
+
+
+
+</table>
+<input type="submit" name="Add"value="Add" />
+<input type="submit" name="Delete"value="Delete" />
+<input type="submit" name="Update"value="Update" />
+<input type="submit" name="Reset"value="Reset Table" />
+</form>
+
+
+<br><br><br>* warning for foreign key constraits
+			* table addition depens on other table due to the foreign key <br>
+			* so you can not add any row that does not apper referenced key <br>
+			* also ON UPDATE and ON DELETE is CASCADE
+ <hr>
+<!-- ################ TEAMS ################ -->
+
+<h1> Teams Table </h1>
+<form action="{{ url_for('power_boat') }}" method="post">
+<table border="1">
+
+		<tr>
+			<td>  </td>
+			<th>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>name</th>
+			<th>captain</th>
+			<th>championship</th>
+		</tr>
+		{% for id, name, captain , championship in teams %}
+			<tr>
+				<td>  </td>
+				<td> {{id}}   </td>
+				<td> {{name}} </td>
+				<td> {{captain}} </td>
+				<td> {{championship}} </td>
+		    </tr>
+		{% endfor %}
+
+</table>
+
+<br><br><br> <hr>
+<!-- ################ Boats ################ -->
+
+<h1> Boats Table </h1>
+
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>driver</th>
+			<th>speed</th>
+
+		</tr>
+		{% for id, driver, speed  in boats %}
+			<tr>
+				<td></td>
+				<td> {{id}}   </td>
+				<td> {{driver}} </td>
+				<td> {{speed}} </td>
+
+		    </tr>
+		{% endfor %}
+
+</table>
+
+<br><br><br> <hr>
+<!-- ################ League 15 ################ -->
+
+<h1> League 2015 Table </h1>
+
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>pos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>boat</th>
+			<th>points</th>
+
+		</tr>
+		{% for pos, boat, point in league15 %}
+			<tr>
+				<td>  </td>
+				<td> {{pos}}   </td>
+				<td> {{boat}} </td>
+				<td> {{point}} </td>
+
+		    </tr>
+		{% endfor %}
+
+</table>
+
+<br><br><br> <hr>
+<!-- ################ Old Races ################ -->
+
+<h1> Old Races Table </h1>
+
+<table border="1">
+
+		<tr>
+			<th> </th>
+			<th>race id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<th>class</th>
+			<th>year</th>
+			<th>location</th>
+			<th>winner</th>
+
+		</tr>
+		{% for race_id, class, date,location,winner in oldraces %}
+			<tr>
+				<td>  </td>
+				<td> {{race_id}}   </td>
+				<td> {{class}} </td>
+				<td> {{date}} </td>
+				<td> {{location}} </td>
+				<td> {{winner}} </td>
+		    </tr>
+		{% endfor %}
+
+</table>
+
+<br><br><br> <hr>
+
+{% endblock %}

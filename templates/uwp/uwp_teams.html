@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %} - Underwater Photography {% endblock %}
+
+<!--{% block Category1 %} <a href="/underwater_photography/competitors">Competitors</a> {% endblock %}
+{% block Category2 %} <a href="/underwater_photography/teams">Teams</a> {% endblock %}-->
+{% block Category1Link %} "/underwater_photography/competitors" {% endblock %}
+{% block Category1Name %} Competitors {% endblock %}
+{% block Category2Link %} "/underwater_photography/teams" {% endblock %}
+{% block Category2Name %} Teams {% endblock %}
+
+{% block body %}
+<h1> Team List </h1>
+<form action="{{ url_for('uwp_team') }}" method="post">
+	<table>
+		<tr>
+			<th> </th>
+			<th>Country</th>
+			<th>Number of members</th>
+		</tr>
+		{% for id, country, num_mem in teams %}
+			<tr>
+				<td> <input type="radio" name="select"value="{{id}}" /> </td>
+				<td> {{country}} </td>
+				<td> {{num_mem}} </td>
+		    </tr>
+		{% endfor %}
+		<tr>
+			<td> </td>
+			<td> <input type="text" name="Country" value="" placeholder="Country"/>   </td>
+	    </tr>
+	</table>
+	<input type="submit" name="Add"value="Add" />
+	<input type="submit" name="Delete"value="Delete" />
+	<input type="submit" name="Update"value="Update" />
+</form>
+
+<footer>Ercan Alp Serteli</footer>
+{% endblock %}

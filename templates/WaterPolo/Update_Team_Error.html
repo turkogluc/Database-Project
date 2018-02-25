@@ -1,0 +1,18 @@
+{% extends "WaterPolo/WaterPolo_Layout.html" %}
+
+{% block title %} - Update Water Polo Player{% endblock %}
+
+{% block body %}
+<h1> Please <strong>Select Teams</strong> Before Update Them </h1>
+
+
+
+
+
+	<form action="{{ url_for('Water_Polo') }}" method="post">
+	<input style = "margin:25px"  type="submit" name="Upd_Team" value="Try Again" class="btn btn-info btn-md"/>
+</form>
+
+
+
+{% endblock %}
